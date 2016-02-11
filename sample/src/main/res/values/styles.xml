@@ -1,0 +1,34 @@
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
+        <item name="windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowNoTitle">true</item>
+
+        <item name="colorPrimary">#fed300</item>
+        <!-- colorPrimaryDark is used for the status bar -->
+        <item name="colorPrimaryDark">#FBC02D</item>
+        <!-- colorAccent is used as the default value for colorControlActivated,
+             which is used to tint widgets -->
+        <item name="colorAccent">#1565C0</item>
+    </style>
+
+    <style name="ActionBarPopupTheme.Light" parent="@style/ThemeOverlay.AppCompat.Light"/>
+    <style name="ActionBarTheme.Light" parent="@style/ThemeOverlay.AppCompat.Light"/>
+
+    <style name="Toolbar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">?attr/actionBarSize</item>
+        <item name="android:theme">@style/ActionBarTheme.Light</item>
+        <item name="popupTheme">@style/ActionBarPopupTheme.Light</item>
+    </style>
+
+    <style name="AppBarLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:theme">@style/ActionBarTheme.Light</item>
+        <item name="android:background">?colorPrimary</item>
+    </style>
+
+</resources>

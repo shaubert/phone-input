@@ -1,0 +1,24 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:1.5.0'
+    }
+}
+
+allprojects {
+    version = VERSION_NAME
+    group = GROUP
+
+    repositories {
+        mavenCentral()
+        maven{url "https://github.com/shaubert/maven-repo/raw/master/releases"}
+    }
+
+    tasks.withType(JavaCompile) {
+        options.encoding = "UTF-8"
+        options.compilerArgs << "-Xlint:unchecked"
+    }
+}

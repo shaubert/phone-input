@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.SearchView
+        android:id="@+id/pi_search_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginEnd="8dp"
+        app:iconifiedByDefault="false"
+        app:queryHint="@string/pi_country_search_hint"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/pi_country_picker_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingBottom="10dp"
+        android:clipToPadding="false"
+        android:scrollbars="vertical"
+        android:scrollbarStyle="outsideOverlay"/>
+
+</LinearLayout>

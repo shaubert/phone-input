@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pi_item_country_format">%1$s (+%2$s)</string>
+
+    <string name="pi_country_search_hint">Search country</string>
+
+</resources>
