@@ -12,4 +12,4 @@ Widget to enter phone numbers in international format
 
 ### Thanks
  * [heetch for Android-Country-Picker](https://github.com/heetch/Android-country-picker);
- * [Remoto for IntlPhoneInput](https://github.com/Rimoto/IntlPhoneInput).
+ * [Rimoto for IntlPhoneInput](https://github.com/Rimoto/IntlPhoneInput).
