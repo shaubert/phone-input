@@ -1,8 +1,11 @@
 package com.shaubert.ui.phone;
 
+import android.content.Context;
 import android.support.annotation.Nullable;
 
 public interface CountryPickerView {
+
+    Context getContext();
 
     Country getCountry();
 
