@@ -1,4 +1,4 @@
-package com.shaubert.ui.phone;
+package com.shaubert.ui.phone.masked;
 
 import android.content.Context;
 import android.os.Parcelable;
@@ -8,6 +8,7 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 import com.shaubert.maskedinput.MaskChar;
 import com.shaubert.maskedinput.metextension.MaskedMETEditText;
+import com.shaubert.ui.phone.*;
 
 public class PhoneInputMaskedMETEditText extends MaskedMETEditText implements PhoneInput {
 

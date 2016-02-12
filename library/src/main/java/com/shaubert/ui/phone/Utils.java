@@ -3,10 +3,7 @@ package com.shaubert.ui.phone;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import com.shaubert.maskedinput.MaskChar;
-import com.shaubert.maskedinput.MaskedInputView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -74,17 +71,4 @@ class Utils {
         imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
     }
 
-    static MaskChar findNumericMaskChar(MaskedInputView inputView) {
-        MaskChar numericChar = null;
-        MaskChar[] maskChars = inputView.getMaskChars();
-        if (maskChars != null) {
-            for (MaskChar maskChar : maskChars) {
-                if (maskChar.getInputTypeClass() == EditorInfo.TYPE_CLASS_NUMBER) {
-                    numericChar = maskChar;
-                    break;
-                }
-            }
-        }
-        return numericChar;
-    }
 }

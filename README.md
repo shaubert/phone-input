@@ -10,6 +10,8 @@ Widget to enter phone numbers in international format
         compile 'com.shaubert.ui.phone:library:1.0'
     }
 
+or use `com.shaubert.ui.phone:library` for masked input.
+
 ### Thanks
  * [heetch for Android-Country-Picker](https://github.com/heetch/Android-country-picker);
  * [Rimoto for IntlPhoneInput](https://github.com/Rimoto/IntlPhoneInput).
