@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 
 dependencies {
     compile project(':library')
-    compile 'com.shaubert.maskedinput:met-extension:1.2.3'
+    compile 'com.shaubert.maskedinput:met-extension:1.2.4'
 }
 
 android {

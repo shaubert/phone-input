@@ -74,7 +74,7 @@ public class CountryPickerDialog extends AppCompatDialog {
                 dismiss();
 
                 if (callbacks != null) {
-                    callbacks.onCountrySelected(country, Utils.getCountryResId(getContext(), country));
+                    callbacks.onCountrySelected(country, countries.getFlagResId(country));
                 }
             }
         });

@@ -3,6 +3,12 @@
 
     <declare-styleable name="pi_PhoneInputStyle">
         <attr name="countryIso" format="string|reference"/>
+        <attr name="phoneNumberFormat" format="enum">
+            <enum name="e164" value="0"/>
+            <enum name="international" value="1"/>
+            <enum name="national" value="2"/>
+            <enum name="rfc3966" value="3"/>
+        </attr>
     </declare-styleable>
 
 </resources>

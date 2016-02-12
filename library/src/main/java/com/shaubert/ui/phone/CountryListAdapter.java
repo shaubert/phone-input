@@ -59,7 +59,7 @@ public class CountryListAdapter extends RecyclerView.Adapter<ItemCountryPresente
     private boolean isMatch(Country country, String query) {
         String countryStr = country.getIsoCode()
                 + " " + countries.getDisplayCountryName(country)
-                + " +" + country.getDialingCode();
+                + " +" + country.getCountryCode();
         return countryStr.toLowerCase().contains(query.toLowerCase());
     }
 

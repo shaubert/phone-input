@@ -10,7 +10,7 @@ import com.shaubert.maskedinput.MaskChar;
 import com.shaubert.maskedinput.metextension.MaskedMETEditText;
 import com.shaubert.ui.phone.*;
 
-public class PhoneInputMaskedMETEditText extends MaskedMETEditText implements PhoneInput {
+public class PhoneInputMaskedMETEditText extends MaskedMETEditText implements PhoneInputView {
 
     private PhoneInputDelegate delegate;
 

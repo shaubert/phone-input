@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private CountryPickerDialogManager pickerDialogManager;
 
     private Button pickCountryButton;
-    private PhoneInput[] phoneInputs;
+    private PhoneInputView[] phoneInputs;
     private Country selectedCountry;
 
     @Override
@@ -29,16 +29,16 @@ public class MainActivity extends AppCompatActivity {
 
         countries = Countries.get(getApplicationContext());
 
-        phoneInputs = new PhoneInput[] {
-                (PhoneInput) findViewById(R.id.phone_input_edit_text),
-                (PhoneInput) findViewById(R.id.phone_input_masked_edit_text),
-                (PhoneInput) findViewById(R.id.phone_input_masked_met_edit_text),
+        phoneInputs = new PhoneInputView[] {
+                (PhoneInputView) findViewById(R.id.phone_input_edit_text),
+                (PhoneInputView) findViewById(R.id.phone_input_masked_edit_text),
+                (PhoneInputView) findViewById(R.id.phone_input_masked_met_edit_text),
         };
         
         ((CheckBox) findViewById(R.id.national_format)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                for (PhoneInput input : phoneInputs) {
+                for (PhoneInputView input : phoneInputs) {
                     input.setPhoneNumberFormat(isChecked
                             ? PhoneNumberUtil.PhoneNumberFormat.NATIONAL
                             : PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL);
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         pickCountryButton.setCompoundDrawables(drawable, null, null, null);
         pickCountryButton.setText(countries.getDisplayCountryName(selectedCountry));
 
-        for (PhoneInput input : phoneInputs) {
+        for (PhoneInputView input : phoneInputs) {
             input.setCountry(selectedCountry);
         }
     }

@@ -7,7 +7,7 @@ import android.widget.EditText;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 
-public class PhoneInputEditText extends EditText implements PhoneInput {
+public class PhoneInputEditText extends EditText implements PhoneInputView {
 
     private PhoneInputDelegate delegate;
 

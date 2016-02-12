@@ -32,10 +32,8 @@ public class ItemCountryPresenter extends RecyclerView.ViewHolder {
         if (data != null) {
             itemView.setVisibility(View.VISIBLE);
 
-            name.setText(name.getResources().getString(R.string.pi_item_country_format,
-                    countries.getDisplayCountryName(data),
-                    data.getDialingCode()));
-            icon.setImageResource(Utils.getCountryResId(itemView.getContext(), data));
+            name.setText(countries.getDisplayCountryName(data));
+            icon.setImageResource(countries.getFlagResId(data));
         } else {
             itemView.setVisibility(View.GONE);
         }

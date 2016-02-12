@@ -2,6 +2,7 @@ package com.shaubert.ui.phone;
 
 import android.content.Context;
 import android.text.TextUtils;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
 
 import java.util.*;
 
@@ -25,8 +26,13 @@ public class Countries {
 
     public static synchronized Countries get(Context context) {
         if (instance == null) {
-            List<Country> countries = Utils.parseCountries(Utils.getCountriesJSON(context));
-            instance = new Countries(countries, context);
+            PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
+            Set<String> regions = phoneNumberUtil.getSupportedRegions();
+            List<Country> countries = new ArrayList<>(regions.size());
+            for (String region : regions) {
+                countries.add(new Country(region, phoneNumberUtil.getCountryCodeForRegion(region)));
+            }
+            Countries.instance = new Countries(countries, context);
         }
 
         return instance;
@@ -76,7 +82,20 @@ public class Countries {
     }
 
     public int getFlagResId(Country country) {
-        return Utils.getCountryResId(appContext, country);
+        int countryResId = getCountryResId(appContext, country);
+        if (countryResId == 0) {
+            countryResId = R.mipmap.unknown_flag;
+        }
+        return countryResId;
+    }
+
+    private static int getCountryResId(Context context, Country country) {
+        return getMipmapResId(context, country.getIsoCode().toLowerCase(Locale.ENGLISH) + "_flag");
+    }
+
+    private static int getMipmapResId(Context context, String drawableName) {
+        return context.getResources().getIdentifier(
+                drawableName.toLowerCase(Locale.ENGLISH), "mipmap", context.getPackageName());
     }
 
 }

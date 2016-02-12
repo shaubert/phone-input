@@ -6,10 +6,10 @@ import com.google.i18n.phonenumbers.Phonenumber;
 import java.util.Locale;
 
 public class DefaultMaskBuilder implements MaskBuilder {
-    private PhoneInput phoneInput;
+    private PhoneInputView phoneInput;
     private PhoneNumberUtil phoneNumberUtil;
 
-    public DefaultMaskBuilder(PhoneInput phoneInput) {
+    public DefaultMaskBuilder(PhoneInputView phoneInput) {
         this.phoneInput = phoneInput;
         phoneNumberUtil = PhoneNumberUtil.getInstance();
     }
@@ -23,6 +23,9 @@ public class DefaultMaskBuilder implements MaskBuilder {
         String region = country.getIsoCode().toUpperCase(Locale.US);
         Phonenumber.PhoneNumber phoneNumber = phoneNumberUtil.getExampleNumberForType(region,
                 PhoneNumberUtil.PhoneNumberType.MOBILE);
+        if (phoneNumber == null) {
+            phoneNumber = phoneNumberUtil.getExampleNumber(region);
+        }
         if (phoneNumber == null) {
             return null;
         }

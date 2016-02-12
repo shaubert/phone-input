@@ -5,18 +5,37 @@ package com.shaubert.ui.phone;
  */
 public class Country {
     private final String isoCode;
-    private final String dialingCode;
+    private final int countryCode;
 
-    public Country(String isoCode, String dialingCode) {
+    public Country(String isoCode, int countryCode) {
         this.isoCode = isoCode;
-        this.dialingCode = dialingCode;
+        this.countryCode = countryCode;
     }
 
     public String getIsoCode() {
         return isoCode;
     }
 
-    public String getDialingCode() {
-        return dialingCode;
+    public int getCountryCode() {
+        return countryCode;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Country country = (Country) o;
+
+        if (countryCode != country.countryCode) return false;
+        return isoCode.equals(country.isoCode);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = isoCode.hashCode();
+        result = 31 * result + countryCode;
+        return result;
     }
 }

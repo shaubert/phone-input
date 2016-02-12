@@ -23,9 +23,9 @@ public class PhoneInputDelegate {
     private PhoneNumberUtil phoneNumberUtil;
     private MaskBuilder maskBuilder;
 
-    private PhoneInput phoneInput;
+    private PhoneInputView phoneInput;
 
-    public PhoneInputDelegate(PhoneInput phoneInput, AttributeSet attrs) {
+    public PhoneInputDelegate(PhoneInputView phoneInput, AttributeSet attrs) {
         this.phoneInput = phoneInput;
         maskBuilder = new DefaultMaskBuilder(phoneInput);
         init(attrs);
@@ -48,6 +48,22 @@ public class PhoneInputDelegate {
             Country country = countries.getCountryByIso(countryIso);
             if (country != null) {
                 setCountry(country);
+            }
+
+            int formatInt = typedArray.getInt(R.styleable.pi_PhoneInputStyle_phoneNumberFormat, -1);
+            switch (formatInt) {
+                case 0:
+                    phoneNumberFormat = PhoneNumberUtil.PhoneNumberFormat.E164;
+                    break;
+                case 1:
+                    phoneNumberFormat = PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL;
+                    break;
+                case 2:
+                    phoneNumberFormat = PhoneNumberUtil.PhoneNumberFormat.NATIONAL;
+                    break;
+                case 3:
+                    phoneNumberFormat = PhoneNumberUtil.PhoneNumberFormat.RFC3966;
+                    break;
             }
 
             typedArray.recycle();
@@ -175,9 +191,6 @@ public class PhoneInputDelegate {
     public static class SavedState extends View.BaseSavedState {
         String countryIso;
 
-        /**
-         * Constructor called from {@link PhoneInputMaskedEditText#onSaveInstanceState()}
-         */
         SavedState(Parcelable superState) {
             super(superState);
         }

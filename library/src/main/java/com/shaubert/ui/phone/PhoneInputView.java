@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 
-public interface PhoneInput {
+public interface PhoneInputView {
 
     void setMaskBuilder(MaskBuilder maskBuilder);
 
