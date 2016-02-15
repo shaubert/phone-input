@@ -83,7 +83,7 @@ public class PhoneInputMaskedMETEditText extends MaskedMETEditText implements Ph
 
     @Override
     public void setPhoneNumber(@Nullable Phonenumber.PhoneNumber phoneNumber) {
-        setPhoneNumberString(delegate.getValueForMask(phoneNumber));
+        setTextInMask(delegate.getValueForMask(phoneNumber));
     }
 
     @Override
