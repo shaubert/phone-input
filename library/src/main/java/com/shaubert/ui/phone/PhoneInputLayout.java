@@ -8,6 +8,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.Phonenumber;
 
 public class PhoneInputLayout extends LinearLayout {
 
@@ -16,6 +18,7 @@ public class PhoneInputLayout extends LinearLayout {
 
     private Country country;
     private Countries countries;
+    private PhoneNumberUtil phoneNumberUtil;
 
     public PhoneInputLayout(Context context) {
         super(context);
@@ -41,6 +44,7 @@ public class PhoneInputLayout extends LinearLayout {
     private void init() {
         setOrientation(HORIZONTAL);
         countries = Countries.get(getContext());
+        phoneNumberUtil = PhoneNumberUtil.getInstance();
 
         String[] possibleRegions = Phones.getPossibleRegions(getContext());
         for (String region : possibleRegions) {
@@ -96,6 +100,46 @@ public class PhoneInputLayout extends LinearLayout {
 
     public Country getCountry() {
         return country;
+    }
+
+    public void setPhoneNumberFormat(PhoneNumberUtil.PhoneNumberFormat phoneNumberFormat) {
+        if (phoneInput != null) phoneInput.setPhoneNumberFormat(phoneNumberFormat);
+    }
+
+    public PhoneNumberUtil.PhoneNumberFormat getPhoneNumberFormat() {
+        return phoneInput != null ? phoneInput.getPhoneNumberFormat() : null;
+    }
+
+    public String getFormattedPhoneNumber(PhoneNumberUtil.PhoneNumberFormat format) {
+        return phoneInput != null ? phoneInput.getFormattedPhoneNumber(format) : null;
+    }
+
+    public boolean isValidPhoneNumber() {
+        return phoneInput != null && phoneInput.isValidPhoneNumber();
+    }
+
+    public void setPhoneNumberString(String phoneNumberStr) {
+        Phonenumber.PhoneNumber phoneNumber = PhoneInputDelegate.getPhoneNumber(phoneNumberStr, country);
+        if (phoneNumber != null) {
+            setPhoneNumber(phoneNumber);
+        } else {
+            if (phoneInput != null) phoneInput.setPhoneNumberString(phoneNumberStr);
+        }
+    }
+
+    public void setPhoneNumber(Phonenumber.PhoneNumber phoneNumber) {
+        if (phoneNumber != null) {
+            String regionCode = phoneNumberUtil.getRegionCodeForCountryCode(phoneNumber.getCountryCode());
+            Country country = countries.getCountryByIso(regionCode);
+            if (country != null) {
+                setCountry(country);
+            }
+        }
+        if (phoneInput != null) phoneInput.setPhoneNumber(phoneNumber);
+    }
+
+    public Phonenumber.PhoneNumber getPhoneNumber() {
+        return phoneInput != null ? phoneInput.getPhoneNumber() : null;
     }
 
     public CountryPickerView getCountryPicker() {

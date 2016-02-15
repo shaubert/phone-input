@@ -26,6 +26,7 @@
             android:orientation="vertical">
 
             <com.shaubert.ui.phone.PhoneInputLayout
+                android:id="@+id/phone_input_layout"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical">
@@ -47,6 +48,12 @@
                     app:phoneNumberFormat="international"/>
 
             </com.shaubert.ui.phone.PhoneInputLayout>
+
+            <Button
+                android:id="@+id/set_random_phone"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:text="Set Random Phone"/>
 
             <Button
                 android:id="@+id/pick_country"

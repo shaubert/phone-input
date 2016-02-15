@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
@@ -165,6 +166,10 @@ public class PhoneInputDelegate {
     }
 
     public Phonenumber.PhoneNumber getPhoneNumber(String text) {
+        return getPhoneNumber(text, country);
+    }
+
+    public static Phonenumber.PhoneNumber getPhoneNumber(@Nullable String text, @Nullable Country country) {
         if (country == null) {
             return null;
         }
@@ -174,7 +179,7 @@ public class PhoneInputDelegate {
         }
 
         try {
-            return phoneNumberUtil.parse(text, country.getIsoCode().toUpperCase(Locale.US));
+            return PhoneNumberUtil.getInstance().parse(text, country.getIsoCode().toUpperCase(Locale.US));
         } catch (NumberParseException ignored) {
         }
         return null;

@@ -9,7 +9,11 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.Phonenumber;
 import com.shaubert.ui.phone.*;
+
+import java.util.List;
+import java.util.Random;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -17,8 +21,10 @@ public class MainActivity extends AppCompatActivity {
     private Countries countries;
     private CountryPickerDialogManager pickerDialogManager;
 
+    private Button setRandomPhoneButton;
     private Button pickCountryButton;
     private PhoneInputView[] phoneInputs;
+    private PhoneInputLayout phoneInputLayout;
     private Country selectedCountry;
 
     @Override
@@ -34,7 +40,9 @@ public class MainActivity extends AppCompatActivity {
                 (PhoneInputView) findViewById(R.id.phone_input_masked_edit_text),
                 (PhoneInputView) findViewById(R.id.phone_input_masked_met_edit_text),
         };
-        
+
+        phoneInputLayout = (PhoneInputLayout) findViewById(R.id.phone_input_layout);
+
         ((CheckBox) findViewById(R.id.national_format)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -57,6 +65,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        setRandomPhoneButton = (Button) findViewById(R.id.set_random_phone);
+        setRandomPhoneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setRandomPhone();
+            }
+        });
+
         pickerDialogManager = new CountryPickerDialogManager("country-picker", getSupportFragmentManager());
         pickerDialogManager.setCallbacks(new CountryPickerCallbacks() {
             @Override
@@ -72,6 +88,25 @@ public class MainActivity extends AppCompatActivity {
                 setSelectedCountry(country);
                 break;
             }
+        }
+    }
+
+    private void setRandomPhone() {
+        List<Country> countries = this.countries.getCountries();
+        Country country = countries.get(new Random().nextInt(countries.size()));
+        PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
+        Phonenumber.PhoneNumber phoneNumber =
+                phoneNumberUtil.getExampleNumberForType(country.getIsoCode(), PhoneNumberUtil.PhoneNumberType.MOBILE);
+        if (phoneNumber == null) {
+            phoneNumber = phoneNumberUtil.getExampleNumber(country.getIsoCode());
+        }
+        if (phoneNumber != null) {
+            setSelectedCountry(country);
+            for (PhoneInputView inputView : phoneInputs) {
+                inputView.setPhoneNumber(phoneNumber);
+            }
+
+            phoneInputLayout.setPhoneNumber(phoneNumber);
         }
     }
 
