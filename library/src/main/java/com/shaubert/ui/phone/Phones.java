@@ -2,6 +2,8 @@ package com.shaubert.ui.phone;
 
 import android.content.Context;
 import android.telephony.TelephonyManager;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.Phonenumber;
 
 import java.util.Locale;
 
@@ -37,4 +39,8 @@ public class Phones {
         return Locale.getDefault().getCountry();
     }
 
+    public static Country getCountyFromPhone(Phonenumber.PhoneNumber phoneNumber, Context context) {
+        String regionCode = PhoneNumberUtil.getInstance().getRegionCodeForCountryCode(phoneNumber.getCountryCode());
+        return Countries.get(context).getCountryByIso(regionCode);
+    }
 }

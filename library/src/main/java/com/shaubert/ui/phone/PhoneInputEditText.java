@@ -77,6 +77,7 @@ public class PhoneInputEditText extends EditText implements PhoneInputView {
 
     @Override
     public void setPhoneNumberString(String phoneNumber) {
+        delegate.setCountryFromPhoneNumber(phoneNumber);
         setText(phoneNumber);
     }
 

@@ -20,6 +20,8 @@ public class PhoneInputLayout extends LinearLayout {
     private Countries countries;
     private PhoneNumberUtil phoneNumberUtil;
 
+    private boolean innerCountryChange;
+
     public PhoneInputLayout(Context context) {
         super(context);
         init();
@@ -83,18 +85,28 @@ public class PhoneInputLayout extends LinearLayout {
         this.countryPicker.setOnCountryChangedListener(new CountryPickerView.OnCountryChangedListener() {
             @Override
             public void onCountryChanged(@Nullable Country country) {
+                if (innerCountryChange) return;
+
                 setCountry(country);
+                if (phoneInput != null) ((View) phoneInput).requestFocus();
             }
         });
     }
 
     public void setCountry(Country country) {
+        if (this.country == country || (this.country != null && this.country.equals(country))) {
+            return;
+        }
         this.country = country;
+
         if (phoneInput != null) {
             phoneInput.setCountry(country);
         }
+
         if (countryPicker != null) {
+            innerCountryChange = true;
             countryPicker.setCountry(country);
+            innerCountryChange = false;
         }
     }
 
@@ -129,8 +141,7 @@ public class PhoneInputLayout extends LinearLayout {
 
     public void setPhoneNumber(Phonenumber.PhoneNumber phoneNumber) {
         if (phoneNumber != null) {
-            String regionCode = phoneNumberUtil.getRegionCodeForCountryCode(phoneNumber.getCountryCode());
-            Country country = countries.getCountryByIso(regionCode);
+            Country country = Phones.getCountyFromPhone(phoneNumber, getContext());
             if (country != null) {
                 setCountry(country);
             }

@@ -32,11 +32,6 @@ public class PhoneInputDelegate {
         init(attrs);
     }
 
-    public void setMaskBuilder(MaskBuilder maskBuilder) {
-        this.maskBuilder = maskBuilder;
-        refreshMask();
-    }
-
     private void init(AttributeSet attrs) {
         countries = Countries.get(getContext());
         phoneNumberUtil = PhoneNumberUtil.getInstance();
@@ -44,12 +39,6 @@ public class PhoneInputDelegate {
 
         if (attrs != null) {
             TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.pi_PhoneInputStyle);
-
-            String countryIso = typedArray.getString(R.styleable.pi_PhoneInputStyle_countryIso);
-            Country country = countries.getCountryByIso(countryIso);
-            if (country != null) {
-                setCountry(country);
-            }
 
             int formatInt = typedArray.getInt(R.styleable.pi_PhoneInputStyle_phoneNumberFormat, -1);
             switch (formatInt) {
@@ -67,8 +56,16 @@ public class PhoneInputDelegate {
                     break;
             }
 
+            String countryIso = typedArray.getString(R.styleable.pi_PhoneInputStyle_countryIso);
+            Country country = countries.getCountryByIso(countryIso);
+            if (country != null) {
+                this.country = country;
+            }
+
             typedArray.recycle();
         }
+
+        refreshMask();
     }
 
     private void setupDefaultCountry() {
@@ -76,20 +73,23 @@ public class PhoneInputDelegate {
         for (String region : possibleRegions) {
             Country country = countries.getCountryByIso(region);
             if (country != null) {
-                setDefaultCountry(country);
+                this.defaultCountry = country;
+                this.country = country;
                 break;
             }
         }
     }
 
-    public Country getDefaultCountry() {
-        return defaultCountry;
+    public void setMaskBuilder(MaskBuilder maskBuilder) {
+        if (this.maskBuilder == maskBuilder || (this.maskBuilder != null && this.maskBuilder.equals(maskBuilder))) {
+            return;
+        }
+        this.maskBuilder = maskBuilder;
+        refreshMask();
     }
 
-    private void setDefaultCountry(Country country) {
-        this.defaultCountry = country;
-        this.country = country;
-        refreshMask();
+    public Country getDefaultCountry() {
+        return defaultCountry;
     }
 
     public void setCountryIso(String countryIso) {
@@ -97,6 +97,9 @@ public class PhoneInputDelegate {
     }
 
     public void setCountry(Country country) {
+        if (this.country == country || (this.country != null && this.country.equals(country))) {
+            return;
+        }
         this.country = country;
         refreshMask();
     }
@@ -191,6 +194,22 @@ public class PhoneInputDelegate {
         }
 
         return phoneNumberUtil.format(phoneNumber, phoneNumberFormat);
+    }
+
+    public void setCountryFromPhoneNumber(String phoneNumber) {
+        Phonenumber.PhoneNumber number = getPhoneNumber(phoneNumber);
+        if (number != null) {
+            setCountryFromPhoneNumber(number);
+        }
+    }
+
+    public void setCountryFromPhoneNumber(Phonenumber.PhoneNumber phoneNumber) {
+        if (phoneNumber != null) {
+            Country country = Phones.getCountyFromPhone(phoneNumber, getContext());
+            if (country != null) {
+                setCountry(country);
+            }
+        }
     }
 
     public static class SavedState extends View.BaseSavedState {
