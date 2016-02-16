@@ -26,13 +26,12 @@ public class PhoneInputDelegate {
 
     private PhoneInputView phoneInput;
 
-    public PhoneInputDelegate(PhoneInputView phoneInput, AttributeSet attrs) {
+    public PhoneInputDelegate(PhoneInputView phoneInput) {
         this.phoneInput = phoneInput;
         maskBuilder = new DefaultMaskBuilder(phoneInput);
-        init(attrs);
     }
 
-    private void init(AttributeSet attrs) {
+    public void init(AttributeSet attrs) {
         countries = Countries.get(getContext());
         phoneNumberUtil = PhoneNumberUtil.getInstance();
         setupDefaultCountry();
@@ -102,6 +101,10 @@ public class PhoneInputDelegate {
         }
         this.country = country;
         refreshMask();
+    }
+
+    public Country getCountry() {
+        return country;
     }
 
     public PhoneNumberUtil.PhoneNumberFormat getPhoneNumberFormat() {

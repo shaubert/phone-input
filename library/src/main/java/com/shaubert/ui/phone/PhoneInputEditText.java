@@ -10,6 +10,7 @@ import com.google.i18n.phonenumbers.Phonenumber;
 public class PhoneInputEditText extends EditText implements PhoneInputView {
 
     private PhoneInputDelegate delegate;
+    private CustomPhoneNumberFormattingTextWatcher formattingTextWatcher;
 
     public PhoneInputEditText(Context context) {
         super(context);
@@ -27,7 +28,8 @@ public class PhoneInputEditText extends EditText implements PhoneInputView {
     }
 
     private void init(AttributeSet attrs) {
-        delegate = new PhoneInputDelegate(this, attrs);
+        delegate = new PhoneInputDelegate(this);
+        delegate.init(attrs);
     }
 
     @Override
@@ -107,5 +109,14 @@ public class PhoneInputEditText extends EditText implements PhoneInputView {
     @Override
     public void setMask(String mask) {
         setHint(mask);
+        if (formattingTextWatcher != null) {
+            removeTextChangedListener(formattingTextWatcher);
+            formattingTextWatcher = null;
+        }
+        Country country = delegate.getCountry();
+        if (country != null) {
+            formattingTextWatcher = new CustomPhoneNumberFormattingTextWatcher(country);
+            addTextChangedListener(formattingTextWatcher);
+        }
     }
 }
