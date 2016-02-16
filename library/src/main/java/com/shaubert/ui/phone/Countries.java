@@ -2,7 +2,6 @@ package com.shaubert.ui.phone;
 
 import android.content.Context;
 import android.text.TextUtils;
-import com.google.i18n.phonenumbers.PhoneNumberUtil;
 
 import java.util.*;
 
@@ -26,13 +25,8 @@ public class Countries {
 
     public static synchronized Countries get(Context context) {
         if (instance == null) {
-            PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
-            Set<String> regions = phoneNumberUtil.getSupportedRegions();
-            List<Country> countries = new ArrayList<>(regions.size());
-            for (String region : regions) {
-                countries.add(new Country(region, phoneNumberUtil.getCountryCodeForRegion(region)));
-            }
-            Countries.instance = new Countries(countries, context);
+            List<Country> countries = CountriesBuilder.createCountriesList();
+            instance = new Countries(countries, context);
         }
 
         return instance;

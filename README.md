@@ -1,6 +1,10 @@
 # Phone Input
 Widget to enter phone numbers in international format
 
+### Proguard
+
+`-keep class com.google.i18n.phonenumbers.** { *; }`
+
 ### Gradle
     
     repositories {
