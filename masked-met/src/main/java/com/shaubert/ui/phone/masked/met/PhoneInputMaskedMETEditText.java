@@ -1,4 +1,4 @@
-package com.shaubert.ui.phone.masked;
+package com.shaubert.ui.phone.masked.met;
 
 import android.content.Context;
 import android.os.Parcelable;
@@ -8,7 +8,11 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 import com.shaubert.maskedinput.MaskChar;
 import com.shaubert.maskedinput.metextension.MaskedMETEditText;
-import com.shaubert.ui.phone.*;
+import com.shaubert.ui.phone.Country;
+import com.shaubert.ui.phone.MaskBuilder;
+import com.shaubert.ui.phone.PhoneInputDelegate;
+import com.shaubert.ui.phone.PhoneInputView;
+import com.shaubert.ui.phone.masked.MaskedPhoneUtils;
 
 public class PhoneInputMaskedMETEditText extends MaskedMETEditText implements PhoneInputView {
 
@@ -30,7 +34,8 @@ public class PhoneInputMaskedMETEditText extends MaskedMETEditText implements Ph
     }
 
     private void init(AttributeSet attrs) {
-        delegate = new PhoneInputDelegate(this, attrs);
+        delegate = new PhoneInputDelegate(this);
+        delegate.init(attrs);
     }
 
     @Override
@@ -141,7 +146,7 @@ public class PhoneInputMaskedMETEditText extends MaskedMETEditText implements Ph
 
     @Override
     public Character getMaskChar() {
-        MaskChar maskChar = Utils.findNumericMaskChar(this);
+        MaskChar maskChar = MaskedPhoneUtils.findNumericMaskChar(this);
         return maskChar != null ? maskChar.getMaskChar() : null;
     }
 }

@@ -30,7 +30,8 @@ public class PhoneInputMaskedEditText extends MaskedEditText implements PhoneInp
     }
 
     private void init(AttributeSet attrs) {
-        delegate = new PhoneInputDelegate(this, attrs);
+        delegate = new PhoneInputDelegate(this);
+        delegate.init(attrs);
     }
 
     @Override
@@ -141,7 +142,7 @@ public class PhoneInputMaskedEditText extends MaskedEditText implements PhoneInp
 
     @Override
     public Character getMaskChar() {
-        MaskChar maskChar = Utils.findNumericMaskChar(this);
+        MaskChar maskChar = MaskedPhoneUtils.findNumericMaskChar(this);
         return maskChar != null ? maskChar.getMaskChar() : null;
     }
 

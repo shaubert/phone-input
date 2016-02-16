@@ -4,12 +4,9 @@ import android.view.inputmethod.EditorInfo;
 import com.shaubert.maskedinput.MaskChar;
 import com.shaubert.maskedinput.MaskedInputView;
 
-/**
- * Created by GODARD Tuatini on 07/05/15.
- */
-class Utils {
+public class MaskedPhoneUtils {
 
-    static MaskChar findNumericMaskChar(MaskedInputView inputView) {
+    public static MaskChar findNumericMaskChar(MaskedInputView inputView) {
         MaskChar numericChar = null;
         MaskChar[] maskChars = inputView.getMaskChars();
         if (maskChars != null) {
