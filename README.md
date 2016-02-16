@@ -7,10 +7,10 @@ Widget to enter phone numbers in international format
         maven{url "https://github.com/shaubert/maven-repo/raw/master/releases"}
     }
     dependencies {
-        compile 'com.shaubert.ui.phone:library:1.0.2'
+        compile 'com.shaubert.ui.phone:library:1.0.3'
     }
 
-or use `com.shaubert.ui.phone:masked` for masked input.
+or use `com.shaubert.ui.phone:masked` for masked input, or `com.shaubert.ui.phone:masked-met` for masked MaterialEditText input.
 
 ### Thanks
  * [heetch for Android-Country-Picker](https://github.com/heetch/Android-country-picker);
