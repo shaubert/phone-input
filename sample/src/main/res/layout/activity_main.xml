@@ -14,80 +14,11 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <ScrollView
+    <FrameLayout
+        android:id="@+id/fragment_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:layout_height="match_parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <com.shaubert.ui.phone.PhoneInputLayout
-                android:id="@+id/phone_input_layout"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical">
-
-                <com.shaubert.ui.phone.CountryPickerImageButton
-                    android:id="@+id/input_layout_picker"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:scaleType="fitCenter"/>
-
-                <com.shaubert.ui.phone.masked.PhoneInputMaskedEditText
-                    android:id="@+id/input_layout_edittext"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginStart="8dp"
-                    app:phoneNumberFormat="international"/>
-
-            </com.shaubert.ui.phone.PhoneInputLayout>
-
-            <Button
-                android:id="@+id/set_random_phone"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:text="Set Random Phone"/>
-
-            <Button
-                android:id="@+id/pick_country"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:text="Pick Country"/>
-
-            <CheckBox
-                android:id="@+id/national_format"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="National Format"
-                android:checked="true"/>
-
-            <com.shaubert.ui.phone.PhoneInputEditText
-                android:id="@+id/phone_input_edit_text"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"/>
-
-            <com.shaubert.ui.phone.masked.PhoneInputMaskedEditText
-                android:id="@+id/phone_input_masked_edit_text"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"/>
-
-            <com.shaubert.ui.phone.masked.PhoneInputMaskedMETEditText
-                android:id="@+id/phone_input_masked_met_edit_text"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"/>
-
-        </LinearLayout>
-
-    </ScrollView>
+    </FrameLayout>
 
 </LinearLayout>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/phone_input_layout"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:text="Phone Input Layout"/>
+
+        <Button
+            android:id="@+id/country_picker"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:text="Country Picker"/>
+
+        <Button
+            android:id="@+id/phone_inputs"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:text="Phone Inputs"/>
+
+    </LinearLayout>
+
+</ScrollView>
