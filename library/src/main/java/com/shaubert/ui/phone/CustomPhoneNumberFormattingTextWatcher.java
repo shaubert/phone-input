@@ -1,5 +1,6 @@
 package com.shaubert.ui.phone;
 
+import android.annotation.SuppressLint;
 import android.os.Build;
 import android.telephony.PhoneNumberUtils;
 import android.text.Editable;
@@ -65,6 +66,7 @@ public class CustomPhoneNumberFormattingTextWatcher implements TextWatcher {
     }
 
     @Override
+    @SuppressLint("NewApi")
     public synchronized void afterTextChanged(Editable s) {
         if (mStopFormatting) {
             // Restart the formatting when all texts were clear.
