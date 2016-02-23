@@ -20,6 +20,7 @@ public class CountryPickerDelegate implements CountryPickerView {
     private OnCountryChangedListener onCountryChangedListener;
 
     private CountryPickerView view;
+    private String restoredCountryIso;
 
     public CountryPickerDelegate(CountryPickerView view, AttributeSet attrs) {
         this.view = view;
@@ -32,7 +33,13 @@ public class CountryPickerDelegate implements CountryPickerView {
             throw new IllegalArgumentException("must be created with FragmentActivity");
         }
 
-        countries = Countries.get(getContext());
+        Countries.get(getContext(), new Countries.Callback() {
+            @Override
+            public void onLoaded(Countries loadedCountries) {
+                countries = loadedCountries;
+                onCountriesLoaded();
+            }
+        });
     }
 
     public void openPicker() {
@@ -55,6 +62,9 @@ public class CountryPickerDelegate implements CountryPickerView {
     }
 
     public Countries getCountries() {
+        if (countries == null) {
+            countries = Countries.get(getContext());
+        }
         return countries;
     }
 
@@ -91,12 +101,34 @@ public class CountryPickerDelegate implements CountryPickerView {
             tag = ss.tag;
         }
 
-        Country country = countries.getCountryByIso(ss.countryIso);
-        if (country != null) {
-            setCountry(country);
+        restoredCountryIso = ss.countryIso;
+        if (countries != null) {
+            onCountriesLoaded();
         }
 
         setupDialogManager();
+    }
+
+    private void onCountriesLoaded() {
+        if (!TextUtils.isEmpty(restoredCountryIso)) {
+            Country country = countries.getCountryByIso(restoredCountryIso);
+            restoredCountryIso = null;
+            if (country != null) {
+                setCountry(country);
+                return;
+            }
+        }
+
+        if (this.country != null) return;
+
+        String[] possibleRegions = Phones.getPossibleRegions(getContext());
+        for (String region : possibleRegions) {
+            Country country = countries.getCountryByIso(region);
+            if (country != null) {
+                setCountry(country);
+                break;
+            }
+        }
     }
 
     public Parcelable dispatchOnSaveInstanceState(Parcelable superState) {

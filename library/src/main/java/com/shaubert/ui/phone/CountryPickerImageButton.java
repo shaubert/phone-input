@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageButton;
@@ -11,6 +12,7 @@ import android.widget.ImageButton;
 public class CountryPickerImageButton extends ImageButton implements CountryPickerView {
 
     private CountryPickerDelegate delegate;
+    private OnCountryChangedListener onCountryChangedListener;
 
     public CountryPickerImageButton(Context context) {
         super(context);
@@ -35,6 +37,17 @@ public class CountryPickerImageButton extends ImageButton implements CountryPick
 
     private void init(AttributeSet attrs) {
         delegate = new CountryPickerDelegate(this, attrs);
+        delegate.setOnCountryChangedListener(new OnCountryChangedListener() {
+            @Override
+            public void onCountryChanged(@Nullable Country country) {
+                refreshCountry();
+                if (onCountryChangedListener != null) {
+                    onCountryChangedListener.onCountryChanged(country);
+                }
+            }
+        });
+        refreshCountry();
+
         super.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,7 +73,11 @@ public class CountryPickerImageButton extends ImageButton implements CountryPick
     @Override
     public void setCountry(Country country) {
         delegate.setCountry(country);
+        refreshCountry();
+    }
 
+    private void refreshCountry() {
+        Country country = delegate.getCountry();
         if (country != null) {
             setImageResource(delegate.getCountries().getFlagResId(country));
         } else {
@@ -70,7 +87,7 @@ public class CountryPickerImageButton extends ImageButton implements CountryPick
 
     @Override
     public void setOnCountryChangedListener(OnCountryChangedListener onCountryChangedListener) {
-        delegate.setOnCountryChangedListener(onCountryChangedListener);
+        this.onCountryChangedListener = onCountryChangedListener;
     }
 
     @Override

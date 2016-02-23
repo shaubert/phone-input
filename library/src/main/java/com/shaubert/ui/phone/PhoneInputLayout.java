@@ -18,7 +18,6 @@ public class PhoneInputLayout extends LinearLayout {
 
     private Country country;
     private Countries countries;
-    private PhoneNumberUtil phoneNumberUtil;
 
     private boolean innerCountryChange;
 
@@ -45,13 +44,25 @@ public class PhoneInputLayout extends LinearLayout {
 
     private void init() {
         setOrientation(HORIZONTAL);
-        countries = Countries.get(getContext());
-        phoneNumberUtil = PhoneNumberUtil.getInstance();
+        Countries.get(getContext(), new Countries.Callback() {
+            @Override
+            public void onLoaded(Countries loadedCountries) {
+                countries = loadedCountries;
+                setupPossibleRegion();
+            }
+        });
+    }
+
+    private void setupPossibleRegion() {
+        if (country != null) {
+            return;
+        }
 
         String[] possibleRegions = Phones.getPossibleRegions(getContext());
         for (String region : possibleRegions) {
-            country = countries.getCountryByIso(region);
+            Country country = countries.getCountryByIso(region);
             if (country != null) {
+                setCountry(country);
                 break;
             }
         }

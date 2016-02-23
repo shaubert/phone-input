@@ -51,7 +51,15 @@ public class CountryPickerDialog extends AppCompatDialog {
         this.callbacks = callbacks;
         this.scrollToCountryIsoCode = scrollToCountryIsoCode;
 
-        countries = Countries.get(getContext());
+        Countries.get(getContext(), new Countries.Callback() {
+            @Override
+            public void onLoaded(Countries loadedCountries) {
+                countries = loadedCountries;
+                if (adapter != null) {
+                    adapter.setCountries(countries);
+                }
+            }
+        });
     }
 
     public void setCallbacks(CountryPickerCallbacks callbacks) {

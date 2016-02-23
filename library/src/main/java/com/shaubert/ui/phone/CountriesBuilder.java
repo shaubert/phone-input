@@ -12,8 +12,25 @@ class CountriesBuilder {
 
     public static final String TAG = CountriesBuilder.class.getSimpleName();
 
-    static List<Country> createCountriesList() {
-        List<Country> countries = createCountriesListWithReflection();
+    private static Field countryCallingCodeToRegionCodeMapField;
+    private static Method getCountryCodeToRegionCodeMapMethod;
+    private static Map<String, Integer> regionToCodeMap;
+
+    static int getCountyCode(String countryIso) {
+        Map<String, Integer> codesWithReflection = getCountryCodesWithReflection();
+        if (codesWithReflection != null) {
+            return codesWithReflection.get(countryIso);
+        }
+
+        PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
+        return phoneNumberUtil.getCountryCodeForRegion(countryIso);
+    }
+
+    static List<Country> createCountriesList(boolean loadCountryCodes) {
+        List<Country> countries = null;
+        if (loadCountryCodes) {
+            countries = createCountriesListWithReflection();
+        }
         if (countries == null) {
             countries = createCountriesListWithMetadata();
         }
@@ -25,46 +42,43 @@ class CountriesBuilder {
         Set<String> regions = phoneNumberUtil.getSupportedRegions();
         List<Country> countries = new ArrayList<>(regions.size());
         for (String region : regions) {
-            countries.add(new Country(region, phoneNumberUtil.getCountryCodeForRegion(region)));
+            countries.add(new Country(region));
         }
         return countries;
     }
 
     @SuppressWarnings("unchecked")
     static List<Country> createCountriesListWithReflection() {
-        Map<Integer, List<String>> countryCodeToRegionCodeMap = null;
-        PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
-
-        try {
-            Field field = PhoneNumberUtil.class.getDeclaredField("countryCallingCodeToRegionCodeMap");
-            if (field != null) {
-                field.setAccessible(true);
-                countryCodeToRegionCodeMap = (Map<Integer, List<String>>) field.get(phoneNumberUtil);
-            }
-        } catch (Exception ex) {
-            Log.d(TAG, "failed to fast load countries list from field");
+        Map<String, Integer> regionToCodeMap = getCountryCodesWithReflection();
+        if (regionToCodeMap == null) {
+            return null;
         }
 
-        if (countryCodeToRegionCodeMap == null) {
-            try {
-                Method method = CountryCodeToRegionCodeMap.class.getDeclaredMethod("getCountryCodeToRegionCodeMap");
-                if (method != null) {
-                    method.setAccessible(true);
-                    countryCodeToRegionCodeMap = (Map<Integer, List<String>>) method.invoke(CountryCodeToRegionCodeMap.class);
-                }
-            } catch (Exception ex) {
-                Log.d(TAG, "failed to fast load countries list from CountryCodeToRegionCodeMap");
-            }
+        List<Country> countries = new ArrayList<>(regionToCodeMap.size());
+        for (Map.Entry<String, Integer> entry : regionToCodeMap.entrySet()) {
+            countries.add(new Country(entry.getKey(), entry.getValue()));
         }
 
+        return countries;
+    }
+
+    static synchronized Map<String, Integer> getCountryCodesWithReflection() {
+        if (regionToCodeMap != null) {
+            return regionToCodeMap;
+        }
+
+        Map<Integer, List<String>> countryCodeToRegionCodeMap = getCountyCodeToRegionCodeMap();
         if (countryCodeToRegionCodeMap == null) {
             return null;
         }
 
-        Map<String, Integer> regionToCodeMap = new HashMap<>();
+        PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
+        Set<Integer> globalNetworkCallingCodes = phoneNumberUtil.getSupportedGlobalNetworkCallingCodes();
+
+        regionToCodeMap = new HashMap<>();
         for (Map.Entry<Integer, List<String>> entry : countryCodeToRegionCodeMap.entrySet()) {
             Integer code = entry.getKey();
-            if (phoneNumberUtil.getSupportedGlobalNetworkCallingCodes().contains(code)) {
+            if (globalNetworkCallingCodes.contains(code)) {
                 continue;
             }
 
@@ -74,12 +88,36 @@ class CountriesBuilder {
             }
         }
 
-        List<Country> countries = new ArrayList<>(regionToCodeMap.size());
-        for (Map.Entry<String, Integer> entry : regionToCodeMap.entrySet()) {
-            countries.add(new Country(entry.getKey(), entry.getValue()));
+        return regionToCodeMap;
+    }
+
+    private static Map<Integer, List<String>> getCountyCodeToRegionCodeMap() {
+        PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
+        try {
+            if (countryCallingCodeToRegionCodeMapField == null) {
+                countryCallingCodeToRegionCodeMapField = PhoneNumberUtil.class.getDeclaredField("countryCallingCodeToRegionCodeMap");
+            }
+            if (countryCallingCodeToRegionCodeMapField != null) {
+                countryCallingCodeToRegionCodeMapField.setAccessible(true);
+                return (Map<Integer, List<String>>) countryCallingCodeToRegionCodeMapField.get(phoneNumberUtil);
+            }
+        } catch (Exception ex) {
+            Log.d(TAG, "failed to fast load countries list from field");
         }
 
-        return countries;
+        try {
+            if (getCountryCodeToRegionCodeMapMethod == null) {
+                getCountryCodeToRegionCodeMapMethod = CountryCodeToRegionCodeMap.class.getDeclaredMethod("getCountryCodeToRegionCodeMap");
+            }
+            if (getCountryCodeToRegionCodeMapMethod != null) {
+                getCountryCodeToRegionCodeMapMethod.setAccessible(true);
+                return (Map<Integer, List<String>>) getCountryCodeToRegionCodeMapMethod.invoke(CountryCodeToRegionCodeMap.class);
+            }
+        } catch (Exception ex) {
+            Log.d(TAG, "failed to fast load countries list from CountryCodeToRegionCodeMap");
+        }
+
+        return null;
     }
 
 }

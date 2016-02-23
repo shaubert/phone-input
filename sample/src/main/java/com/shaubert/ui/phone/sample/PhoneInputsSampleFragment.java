@@ -83,6 +83,10 @@ public class PhoneInputsSampleFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        if (savedInstanceState != null) {
+            return;
+        }
+
         Countries countries = Countries.get(getContext());
         String[] possibleRegions = Phones.getPossibleRegions(getContext());
         for (String region : possibleRegions) {

@@ -17,6 +17,8 @@ import java.util.Locale;
 public class PhoneInputDelegate {
 
     private Countries countries;
+    private String countryFromAttrs;
+    private String restoredCountry;
 
     private Country country;
     private Country defaultCountry;
@@ -32,10 +34,6 @@ public class PhoneInputDelegate {
     }
 
     public void init(AttributeSet attrs) {
-        countries = Countries.get(getContext());
-        phoneNumberUtil = PhoneNumberUtil.getInstance();
-        setupDefaultCountry();
-
         if (attrs != null) {
             TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.pi_PhoneInputStyle);
 
@@ -55,16 +53,49 @@ public class PhoneInputDelegate {
                     break;
             }
 
-            String countryIso = typedArray.getString(R.styleable.pi_PhoneInputStyle_countryIso);
-            Country country = countries.getCountryByIso(countryIso);
-            if (country != null) {
-                this.country = country;
-            }
-
+            countryFromAttrs = typedArray.getString(R.styleable.pi_PhoneInputStyle_countryIso);
             typedArray.recycle();
         }
 
-        refreshMask();
+        Countries.get(getContext(), new Countries.Callback() {
+            @Override
+            public void onLoaded(Countries loadedCountries) {
+                countries = loadedCountries;
+                phoneNumberUtil = PhoneNumberUtil.getInstance();
+                onCountriesLoaded();
+            }
+        });
+    }
+
+    private void onCountriesLoaded() {
+        if (defaultCountry == null) {
+            setupDefaultCountry();
+        }
+
+        processRestoredCountry();
+
+        if (this.country != null) {
+            return;
+        }
+
+        Country country = countries.getCountryByIso(countryFromAttrs);
+        if (country != null) {
+            setCountry(country);
+        }
+
+        if (this.country == null) {
+            setCountry(defaultCountry);
+        }
+    }
+
+    private void processRestoredCountry() {
+        if (!TextUtils.isEmpty(restoredCountry)) {
+            Country country = countries.getCountryByIso(restoredCountry);
+            restoredCountry = null;
+            if (country != null) {
+                setCountry(country);
+            }
+        }
     }
 
     private void setupDefaultCountry() {
@@ -73,7 +104,6 @@ public class PhoneInputDelegate {
             Country country = countries.getCountryByIso(region);
             if (country != null) {
                 this.defaultCountry = country;
-                this.country = country;
                 break;
             }
         }
@@ -151,9 +181,9 @@ public class PhoneInputDelegate {
     public void dispatchOnRestoreInstanceState(Parcelable state) {
         SavedState ss = (SavedState) state;
         if (!TextUtils.isEmpty(ss.countryIso)) {
-            Country country = countries.getCountryByIso(ss.countryIso);
-            if (country != null) {
-                setCountry(country);
+            restoredCountry = ss.countryIso;
+            if (countries != null) {
+                processRestoredCountry();
             }
         }
     }
@@ -161,14 +191,21 @@ public class PhoneInputDelegate {
     public String getFormattedPhoneNumber(String text, PhoneNumberUtil.PhoneNumberFormat format) {
         Phonenumber.PhoneNumber phoneNumber = getPhoneNumber(text);
         if (phoneNumber != null) {
-            return phoneNumberUtil.format(phoneNumber, format);
+            return getPhoneNumberUtil().format(phoneNumber, format);
         }
         return null;
     }
 
+    private PhoneNumberUtil getPhoneNumberUtil() {
+        if (phoneNumberUtil == null) {
+            phoneNumberUtil = PhoneNumberUtil.getInstance();
+        }
+        return phoneNumberUtil;
+    }
+
     public boolean isValidPhoneNumber(String text) {
         Phonenumber.PhoneNumber phoneNumber = getPhoneNumber(text);
-        return phoneNumber != null && phoneNumberUtil.isValidNumber(phoneNumber);
+        return phoneNumber != null && getPhoneNumberUtil().isValidNumber(phoneNumber);
     }
 
     public Phonenumber.PhoneNumber getPhoneNumber(String text) {
@@ -196,7 +233,7 @@ public class PhoneInputDelegate {
             return null;
         }
 
-        return phoneNumberUtil.format(phoneNumber, phoneNumberFormat);
+        return getPhoneNumberUtil().format(phoneNumber, phoneNumberFormat);
     }
 
     public void setCountryFromPhoneNumber(String phoneNumber) {

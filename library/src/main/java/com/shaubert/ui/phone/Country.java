@@ -1,23 +1,34 @@
 package com.shaubert.ui.phone;
 
-/**
- * Created by GODARD Tuatini on 07/05/15.
- */
 public class Country {
     private final String isoCode;
-    private final int countryCode;
+
+    private int countryCode;
+    private boolean hasCountryCode;
+
+    public Country(String isoCode) {
+        this.isoCode = isoCode;
+    }
 
     public Country(String isoCode, int countryCode) {
         this.isoCode = isoCode;
         this.countryCode = countryCode;
+        hasCountryCode = true;
     }
 
     public String getIsoCode() {
         return isoCode;
     }
 
-    public int getCountryCode() {
+    public synchronized int getCountryCode() {
+        if (!hasCountryCode) {
+            countryCode = resolveCountryCode();
+        }
         return countryCode;
+    }
+
+    private int resolveCountryCode() {
+        return CountriesBuilder.getCountyCode(isoCode);
     }
 
     @Override

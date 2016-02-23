@@ -23,7 +23,9 @@ public class CountryListAdapter extends RecyclerView.Adapter<ItemCountryPresente
     public void setCountries(Countries countries) {
         this.countries = countries;
         countriesList.clear();
-        countriesList.addAll(countries.getCountries());
+        if (countries != null) {
+            countriesList.addAll(countries.getCountries());
+        }
 
         notifyDataSetChanged();
     }
@@ -39,7 +41,9 @@ public class CountryListAdapter extends RecyclerView.Adapter<ItemCountryPresente
 
         if (query == null) {
             countriesList.clear();
-            countriesList.addAll(countries.getCountries());
+            if (countries != null) {
+                countriesList.addAll(countries.getCountries());
+            }
         } else {
             filterCountries(query);
         }
@@ -49,9 +53,11 @@ public class CountryListAdapter extends RecyclerView.Adapter<ItemCountryPresente
     private void filterCountries(String query) {
         countriesList.clear();
 
-        for (Country country : countries.getCountries()) {
-            if (isMatch(country, query)) {
-                countriesList.add(country);
+        if (countries != null) {
+            for (Country country : countries.getCountries()) {
+                if (isMatch(country, query)) {
+                    countriesList.add(country);
+                }
             }
         }
     }
