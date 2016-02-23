@@ -11,7 +11,7 @@ Widget to enter phone numbers in international format
         maven{url "https://github.com/shaubert/maven-repo/raw/master/releases"}
     }
     dependencies {
-        compile 'com.shaubert.ui.phone:library:1.0.3'
+        compile 'com.shaubert.ui.phone:library:1.0.4'
     }
 
 or use `com.shaubert.ui.phone:masked` for masked input, or `com.shaubert.ui.phone:masked-met` for masked MaterialEditText input.
