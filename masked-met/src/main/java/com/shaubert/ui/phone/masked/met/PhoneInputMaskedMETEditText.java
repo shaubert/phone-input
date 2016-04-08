@@ -135,8 +135,9 @@ public class PhoneInputMaskedMETEditText extends MaskedMETEditText implements Ph
     @Override
     public void onRestoreInstanceState(Parcelable state) {
         BaseSavedState ss = (BaseSavedState) state;
-        super.onRestoreInstanceState(ss.getSuperState());
         delegate.dispatchOnRestoreInstanceState(ss);
+
+        super.onRestoreInstanceState(ss.getSuperState());
     }
 
     @Override

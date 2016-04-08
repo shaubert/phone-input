@@ -92,8 +92,9 @@ public class PhoneInputEditText extends EditText implements PhoneInputView {
     @Override
     public void onRestoreInstanceState(Parcelable state) {
         BaseSavedState ss = (BaseSavedState) state;
-        super.onRestoreInstanceState(ss.getSuperState());
         delegate.dispatchOnRestoreInstanceState(ss);
+
+        super.onRestoreInstanceState(ss.getSuperState());
     }
 
     @Override
