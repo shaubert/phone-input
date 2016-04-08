@@ -91,6 +91,7 @@ class CountriesBuilder {
         return regionToCodeMap;
     }
 
+    @SuppressWarnings("unchecked")
     private static Map<Integer, List<String>> getCountyCodeToRegionCodeMap() {
         PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
         try {
