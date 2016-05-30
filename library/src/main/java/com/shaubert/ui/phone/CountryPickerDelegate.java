@@ -1,6 +1,8 @@
 package com.shaubert.ui.phone;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
@@ -12,6 +14,7 @@ import java.util.UUID;
 
 public class CountryPickerDelegate implements CountryPickerView {
 
+    private FragmentActivity activity;
     private String tag = UUID.randomUUID().toString();
     private Country country;
     private Countries countries;
@@ -28,10 +31,11 @@ public class CountryPickerDelegate implements CountryPickerView {
     }
 
     private void init(AttributeSet attrs) {
-        Context context = getContext();
-        if (!(context instanceof FragmentActivity)) {
+        Activity activity = getActivity(getContext());
+        if (!(activity instanceof FragmentActivity)) {
             throw new IllegalArgumentException("must be created with FragmentActivity");
         }
+        this.activity = (FragmentActivity) activity;
 
         Countries.get(getContext(), new Countries.Callback() {
             @Override
@@ -40,6 +44,16 @@ public class CountryPickerDelegate implements CountryPickerView {
                 onCountriesLoaded();
             }
         });
+    }
+
+    private static Activity getActivity(Context context) {
+        for (;
+             context instanceof ContextWrapper && !(context instanceof Activity);
+             context = ((ContextWrapper) context).getBaseContext());
+        if (context instanceof Activity) {
+            return (Activity) context;
+        }
+        return null;
     }
 
     public void openPicker() {
@@ -51,7 +65,7 @@ public class CountryPickerDelegate implements CountryPickerView {
     private void setupDialogManager() {
         if (countryPickerDialogManager == null) {
             countryPickerDialogManager = new CountryPickerDialogManager(tag,
-                    ((FragmentActivity) getContext()).getSupportFragmentManager());
+                    activity.getSupportFragmentManager());
             countryPickerDialogManager.setCallbacks(new CountryPickerCallbacks() {
                 @Override
                 public void onCountrySelected(Country country, int flagResId) {
