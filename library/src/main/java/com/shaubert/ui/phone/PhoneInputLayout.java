@@ -43,7 +43,6 @@ public class PhoneInputLayout extends LinearLayout {
     }
 
     private void init() {
-        setOrientation(HORIZONTAL);
         Countries.get(getContext(), new Countries.Callback() {
             @Override
             public void onLoaded(Countries loadedCountries) {
