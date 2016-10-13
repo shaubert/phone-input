@@ -13,6 +13,8 @@ public interface CountryPickerView {
 
     void setOnCountryChangedListener(OnCountryChangedListener listener);
 
+    void setCountriesFilter(CountriesFilter countriesFilter);
+
     interface OnCountryChangedListener {
         void onCountryChanged(@Nullable Country country);
     }

@@ -22,6 +22,7 @@ public class CountryPickerDialog extends AppCompatDialog {
     private SearchView searchView;
     private RecyclerView recyclerView;
     private CountryListAdapter adapter;
+    private CountriesFilter countriesFilter;
 
     private CountryPickerCallbacks callbacks;
     private String scrollToCountryIsoCode;
@@ -62,6 +63,13 @@ public class CountryPickerDialog extends AppCompatDialog {
         });
     }
 
+    public void setCountriesFilter(CountriesFilter countriesFilter) {
+        this.countriesFilter = countriesFilter;
+        if (adapter != null) {
+            adapter.setCountriesFilter(countriesFilter);
+        }
+    }
+
     public void setCallbacks(CountryPickerCallbacks callbacks) {
         this.callbacks = callbacks;
     }
@@ -76,6 +84,7 @@ public class CountryPickerDialog extends AppCompatDialog {
 
         adapter = new CountryListAdapter();
         adapter.setCountries(countries);
+        adapter.setCountriesFilter(countriesFilter);
         adapter.setItemClickListener(new CountryListAdapter.ItemClickListener() {
             @Override
             public void onItemClicked(View view, Country country) {

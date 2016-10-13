@@ -1,33 +1,54 @@
 package com.shaubert.ui.phone;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.os.Build;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatImageButton;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.ImageButton;
 
-public class CountryPickerImageButton extends AppCompatImageButton implements CountryPickerView {
+public class CountryPickerLayout extends AppCompatImageButton implements CountryPickerView {
+
+    int FLAG_DISPLAY_TYPE_ICON = 0x0;
+    int FLAG_DISPLAY_TYPE_NAME = 0x2;
+    int FLAG_DISPLAY_TYPE_CODE = 0x4;
 
     private CountryPickerDelegate delegate;
     private OnCountryChangedListener onCountryChangedListener;
+    private int displayType;
 
-    public CountryPickerImageButton(Context context) {
+    public CountryPickerLayout(Context context) {
         super(context);
         init(null);
     }
 
-    public CountryPickerImageButton(Context context, AttributeSet attrs) {
+    public CountryPickerLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(attrs);
     }
 
-    public CountryPickerImageButton(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CountryPickerLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(attrs);
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public CountryPickerLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+        init(attrs);
+    }
+
     private void init(AttributeSet attrs) {
+        if (attrs != null) {
+            TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.pi_PhoneInputStyle);
+            displayType = typedArray.getInt(R.styleable.pi_CountryPickerStyle_displayType, FLAG_DISPLAY_TYPE_ICON);
+            typedArray.recycle();
+        }
+
         delegate = new CountryPickerDelegate(this, attrs);
         delegate.setOnCountryChangedListener(new OnCountryChangedListener() {
             @Override
@@ -70,11 +91,20 @@ public class CountryPickerImageButton extends AppCompatImageButton implements Co
 
     private void refreshCountry() {
         Country country = delegate.getCountry();
-        if (country != null) {
+        if (country != null && isDisplay(FLAG_DISPLAY_TYPE_ICON)) {
             setImageResource(delegate.getCountries().getFlagResId(country));
         } else {
             setImageDrawable(null);
         }
+
+        String text;
+        if (country != null) {
+        }
+        setText
+    }
+
+    private boolean isDisplay(int flag) {
+        return (displayType & flag) == flag;
     }
 
     @Override

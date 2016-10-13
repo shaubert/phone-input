@@ -9,6 +9,7 @@ public class CountryPickerDialogFragment extends AppCompatDialogFragment {
 
     private CountryPickerCallbacks callbacks;
     private String scrollToCountryIsoCode;
+    private CountriesFilter countriesFilter;
 
     public void setCallbacks(CountryPickerCallbacks callbacks) {
         this.callbacks = callbacks;
@@ -16,6 +17,15 @@ public class CountryPickerDialogFragment extends AppCompatDialogFragment {
         CountryPickerDialog dialog = getDialog();
         if (dialog != null) {
             dialog.setCallbacks(callbacks);
+        }
+    }
+
+    public void setCountriesFilter(CountriesFilter countriesFilter) {
+        this.countriesFilter = countriesFilter;
+
+        CountryPickerDialog dialog = getDialog();
+        if (dialog != null) {
+            dialog.setCountriesFilter(countriesFilter);
         }
     }
 
@@ -30,7 +40,9 @@ public class CountryPickerDialogFragment extends AppCompatDialogFragment {
 
     @Override
     public @NonNull Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new CountryPickerDialog(getContext(), callbacks, scrollToCountryIsoCode);
+        CountryPickerDialog pickerDialog = new CountryPickerDialog(getContext(), callbacks, scrollToCountryIsoCode);
+        pickerDialog.setCountriesFilter(countriesFilter);
+        return pickerDialog;
     }
 
     @Override

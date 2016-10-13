@@ -13,6 +13,7 @@ public class CountryListAdapter extends RecyclerView.Adapter<ItemCountryPresente
 
     private Countries countries;
     private List<Country> countriesList = new ArrayList<>();
+    private CountriesFilter countriesFilter;
     private ItemClickListener itemClickListener;
     private String query;
 
@@ -30,6 +31,15 @@ public class CountryListAdapter extends RecyclerView.Adapter<ItemCountryPresente
         notifyDataSetChanged();
     }
 
+    public void setCountriesFilter(CountriesFilter countriesFilter) {
+        if (this.countriesFilter != countriesFilter) {
+            this.countriesFilter = countriesFilter;
+
+            filterCountries();
+            notifyDataSetChanged();
+        }
+    }
+
     public void setQuery(String query) {
         if (TextUtils.isEmpty(query) || query.trim().length() == 0) {
             query = null;
@@ -39,34 +49,37 @@ public class CountryListAdapter extends RecyclerView.Adapter<ItemCountryPresente
         }
         this.query = query;
 
-        if (query == null) {
-            countriesList.clear();
-            if (countries != null) {
-                countriesList.addAll(countries.getCountries());
-            }
-        } else {
-            filterCountries(query);
-        }
+        filterCountries();
         notifyDataSetChanged();
     }
 
-    private void filterCountries(String query) {
+    private void filterCountries() {
         countriesList.clear();
 
         if (countries != null) {
             for (Country country : countries.getCountries()) {
-                if (isMatch(country, query)) {
+                if (isMatch(country)) {
                     countriesList.add(country);
                 }
             }
         }
     }
 
-    private boolean isMatch(Country country, String query) {
-        String countryStr = country.getIsoCode()
-                + " " + countries.getDisplayCountryName(country)
-                + " +" + country.getCountryCode();
-        return countryStr.toLowerCase().contains(query.toLowerCase());
+    private boolean isMatch(Country country) {
+        boolean result = true;
+
+        if (countriesFilter != null) {
+            result = countriesFilter.filter(country);
+        }
+
+        if (result && !TextUtils.isEmpty(query)) {
+            String countryStr = country.getIsoCode()
+                    + " " + countries.getDisplayCountryName(country)
+                    + " +" + country.getCountryCode();
+            result = countryStr.toLowerCase().contains(query.toLowerCase());
+        }
+
+        return result;
     }
 
     public void setItemClickListener(ItemClickListener itemClickListener) {

@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 public class CountryPickerDialogManager {
     private CountryPickerCallbacks callbacks;
     private String scrollToCountryIsoCode;
+    private CountriesFilter countriesFilter;
 
     private String tag;
     private FragmentManager fragmentManager;
@@ -23,6 +24,11 @@ public class CountryPickerDialogManager {
     public void setScrollToCountryIsoCode(String scrollToCountryIsoCode) {
         this.scrollToCountryIsoCode = scrollToCountryIsoCode;
         setScrollToCountryIsoCode(scrollToCountryIsoCode, find());
+    }
+
+    public void setCountriesFilter(CountriesFilter countriesFilter) {
+        this.countriesFilter = countriesFilter;
+        setCountriesFilter(countriesFilter, find());
     }
 
     public void hide() {
@@ -46,6 +52,7 @@ public class CountryPickerDialogManager {
         CountryPickerDialogFragment fragment = new CountryPickerDialogFragment();
         fragment.setCallbacks(callbacks);
         fragment.setScrollToCountryIsoCode(scrollToCountryIsoCode);
+        fragment.setCountriesFilter(countriesFilter);
         return fragment;
     }
 
@@ -62,6 +69,12 @@ public class CountryPickerDialogManager {
     protected void setScrollToCountryIsoCode(String scrollToCountryIsoCode, CountryPickerDialogFragment fragment) {
         if (fragment != null) {
             fragment.setScrollToCountryIsoCode(scrollToCountryIsoCode);
+        }
+    }
+
+    protected void setCountriesFilter(CountriesFilter countriesFilter, CountryPickerDialogFragment fragment) {
+        if (fragment != null) {
+            fragment.setCountriesFilter(countriesFilter);
         }
     }
 

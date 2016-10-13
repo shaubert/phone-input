@@ -21,6 +21,7 @@ public class CountryPickerDelegate implements CountryPickerView {
 
     private CountryPickerDialogManager countryPickerDialogManager;
     private OnCountryChangedListener onCountryChangedListener;
+    private CountriesFilter countriesFilter;
 
     private CountryPickerView view;
     private String restoredCountryIso;
@@ -94,6 +95,12 @@ public class CountryPickerDelegate implements CountryPickerView {
 
     @Override
     public void setCountry(Country country) {
+        if (countriesFilter != null
+                && country != null
+                && !countriesFilter.filter(country)) {
+            country = null;
+        }
+
         if (country == this.country || (country != null && country.equals(this.country))) {
             return;
         }
@@ -107,6 +114,16 @@ public class CountryPickerDelegate implements CountryPickerView {
     @Override
     public void setOnCountryChangedListener(OnCountryChangedListener onCountryChangedListener) {
         this.onCountryChangedListener = onCountryChangedListener;
+    }
+
+    @Override
+    public void setCountriesFilter(CountriesFilter countriesFilter) {
+        this.countriesFilter = countriesFilter;
+
+        setupDialogManager();
+        countryPickerDialogManager.setCountriesFilter(countriesFilter);
+
+        setCountry(country);
     }
 
     public void dispatchOnRestoreInstanceState(Parcelable state) {
