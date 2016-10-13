@@ -22,7 +22,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical">
 
-                <com.shaubert.ui.phone.CountryPickerImageButton
+                <com.shaubert.ui.phone.CountryPickerLayout
                     android:id="@+id/input_layout_picker"
                     android:layout_width="36dp"
                     android:layout_height="36dp"

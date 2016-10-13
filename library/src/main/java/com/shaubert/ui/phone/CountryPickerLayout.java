@@ -2,24 +2,24 @@ package com.shaubert.ui.phone;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.os.Build;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.AppCompatImageButton;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.ImageButton;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-public class CountryPickerLayout extends AppCompatImageButton implements CountryPickerView {
-
-    int FLAG_DISPLAY_TYPE_ICON = 0x0;
-    int FLAG_DISPLAY_TYPE_NAME = 0x2;
-    int FLAG_DISPLAY_TYPE_CODE = 0x4;
+public class CountryPickerLayout extends LinearLayout implements CountryPickerView {
 
     private CountryPickerDelegate delegate;
     private OnCountryChangedListener onCountryChangedListener;
-    private int displayType;
+    private IconAndTextProvider iconAndTextProvider = new DefaultIconAndTextProvider();
+
+    private ImageView iconView;
+    private TextView nameView;
 
     public CountryPickerLayout(Context context) {
         super(context);
@@ -43,12 +43,6 @@ public class CountryPickerLayout extends AppCompatImageButton implements Country
     }
 
     private void init(AttributeSet attrs) {
-        if (attrs != null) {
-            TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.pi_PhoneInputStyle);
-            displayType = typedArray.getInt(R.styleable.pi_CountryPickerStyle_displayType, FLAG_DISPLAY_TYPE_ICON);
-            typedArray.recycle();
-        }
-
         delegate = new CountryPickerDelegate(this, attrs);
         delegate.setOnCountryChangedListener(new OnCountryChangedListener() {
             @Override
@@ -67,6 +61,40 @@ public class CountryPickerLayout extends AppCompatImageButton implements Country
                 openPicker();
             }
         });
+    }
+
+    @Override
+    public void addView(View child, int index, ViewGroup.LayoutParams params) {
+        super.addView(child, index, params);
+
+        if (child instanceof ImageView) {
+            setIconView((ImageView) child);
+        } else if (child instanceof TextView) {
+            setNameView((TextView) child);
+        }
+    }
+
+    private void setIconView(ImageView imageView) {
+        if (this.iconView != null) {
+            throw new IllegalStateException("ImageView was added before");
+        }
+        this.iconView = imageView;
+
+        refreshCountry();
+    }
+
+    private void setNameView(TextView nameView) {
+        if (this.nameView != null) {
+            throw new IllegalStateException("TextView was added before");
+        }
+        this.nameView = nameView;
+
+        refreshCountry();
+    }
+
+    public void setIconAndTextProvider(IconAndTextProvider iconAndTextProvider) {
+        this.iconAndTextProvider = iconAndTextProvider;
+        refreshCountry();
     }
 
     public void openPicker() {
@@ -91,20 +119,24 @@ public class CountryPickerLayout extends AppCompatImageButton implements Country
 
     private void refreshCountry() {
         Country country = delegate.getCountry();
-        if (country != null && isDisplay(FLAG_DISPLAY_TYPE_ICON)) {
-            setImageResource(delegate.getCountries().getFlagResId(country));
-        } else {
-            setImageDrawable(null);
-        }
-
-        String text;
-        if (country != null) {
-        }
-        setText
+        setIcon(iconAndTextProvider.getIconResId(delegate.getCountries(), country));
+        setText(iconAndTextProvider.getName(delegate.getCountries(), country));
     }
 
-    private boolean isDisplay(int flag) {
-        return (displayType & flag) == flag;
+    private void setText(CharSequence text) {
+        if (nameView == null) return;
+        nameView.setText(text);
+    }
+
+    private void setIcon(int iconResId) {
+        if (iconView == null) return;
+
+        if (iconResId != IconAndTextProvider.NO_RES_ID) {
+            iconView.setImageResource(iconResId);
+        } else {
+            iconView.setImageDrawable(null);
+        }
+
     }
 
     @Override
@@ -130,4 +162,22 @@ public class CountryPickerLayout extends AppCompatImageButton implements Country
         return delegate.dispatchOnSaveInstanceState(superState);
     }
 
+    public interface IconAndTextProvider {
+        int NO_RES_ID = -1;
+
+        int getIconResId(Countries countries, @Nullable Country country);
+        CharSequence getName(Countries countries, @Nullable Country country);
+    }
+
+    public static class DefaultIconAndTextProvider implements IconAndTextProvider {
+        @Override
+        public int getIconResId(Countries countries, @Nullable Country country) {
+            return country != null ? countries.getFlagResId(country) : NO_RES_ID;
+        }
+
+        @Override
+        public CharSequence getName(Countries countries, @Nullable Country country) {
+            return country != null ? countries.getDisplayCountryName(country) : null;
+        }
+    }
 }
