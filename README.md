@@ -1,17 +1,13 @@
 # Phone Input
 Widget to enter phone numbers in international format
 
-### Proguard
-
-`-keep class com.google.i18n.phonenumbers.** { *; }`
-
 ### Gradle
     
     repositories {
         maven{url "https://github.com/shaubert/maven-repo/raw/master/releases"}
     }
     dependencies {
-        compile 'com.shaubert.ui.phone:library:1.1.1'
+        compile 'com.shaubert.ui.phone:library:1.2'
     }
 
 or use `com.shaubert.ui.phone:masked` for masked input, or `com.shaubert.ui.phone:masked-met` for masked MaterialEditText input.
