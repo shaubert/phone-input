@@ -1,13 +1,18 @@
 package com.shaubert.ui.phone;
 
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.PhoneNumberUtilProxy;
 import com.google.i18n.phonenumbers.Phonenumber;
 
 import java.util.Locale;
 
 public class DefaultMaskBuilder implements MaskBuilder {
+
+    private static final String DEFAULT_MASK = "123456789012345";
+
     private PhoneInputView phoneInput;
     private PhoneNumberUtil phoneNumberUtil;
+
 
     public DefaultMaskBuilder(PhoneInputView phoneInput) {
         this.phoneInput = phoneInput;
@@ -23,13 +28,13 @@ public class DefaultMaskBuilder implements MaskBuilder {
         String region = country.getIsoCode().toUpperCase(Locale.US);
         Phonenumber.PhoneNumber phoneNumber = phoneNumberUtil.getExampleNumberForType(region,
                 PhoneNumberUtil.PhoneNumberType.MOBILE);
-        if (phoneNumber == null) {
-            phoneNumber = phoneNumberUtil.getExampleNumber(region);
+        String formattedNumber;
+        if (phoneNumber != null) {
+            formattedNumber = phoneNumberUtil.format(phoneNumber, phoneNumberFormat);
+        } else {
+            formattedNumber = getFixedPart(country, phoneNumberFormat) + " " + DEFAULT_MASK;
+
         }
-        if (phoneNumber == null) {
-            return null;
-        }
-        String formattedNumber = phoneNumberUtil.format(phoneNumber, phoneNumberFormat);
 
         Character maskChar = phoneInput.getMaskChar();
         if (maskChar == null) {
@@ -38,10 +43,20 @@ public class DefaultMaskBuilder implements MaskBuilder {
 
         String fixedPart = getFixedPart(country, phoneNumberFormat);
         StringBuilder maskBuilder = new StringBuilder(formattedNumber);
+        int digitsCount = 0;
         for (int i = fixedPart.length(); i < maskBuilder.length(); i++) {
             char ch = maskBuilder.charAt(i);
             if (Character.isDigit(ch)) {
+                digitsCount++;
                 maskBuilder.replace(i, i + 1, maskChar.toString());
+            }
+        }
+
+        Integer maxLength = PhoneNumberUtilProxy.getMaxLength(
+                phoneNumberUtil, region, PhoneNumberUtil.PhoneNumberType.MOBILE);
+        if (maxLength != null && digitsCount < maxLength) {
+            for (int i = digitsCount; i < maxLength; i++) {
+                maskBuilder.append(maskChar.toString());
             }
         }
 

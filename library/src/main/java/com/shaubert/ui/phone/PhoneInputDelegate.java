@@ -222,7 +222,11 @@ public class PhoneInputDelegate {
         }
 
         try {
-            return PhoneNumberUtil.getInstance().parse(text, country.getIsoCode().toUpperCase(Locale.US));
+            String region = country.getIsoCode().toUpperCase(Locale.US);
+            Phonenumber.PhoneNumber number = PhoneNumberUtil.getInstance().parse(text, region);
+            if (PhoneNumberUtil.getInstance().isValidNumberForRegion(number, region)) {
+                return number;
+            }
         } catch (NumberParseException ignored) {
         }
         return null;

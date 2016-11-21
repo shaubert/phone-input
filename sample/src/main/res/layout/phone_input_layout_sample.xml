@@ -26,8 +26,14 @@
                     android:id="@+id/input_layout_picker"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:scaleType="fitCenter"/>
+                    android:background="?android:attr/selectableItemBackground">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitCenter"/>
+
+                </com.shaubert.ui.phone.CountryPickerLayout>
 
                 <com.shaubert.ui.phone.masked.PhoneInputMaskedEditText
                     android:id="@+id/input_layout_edittext"
@@ -39,6 +45,12 @@
                     app:phoneNumberFormat="international"/>
 
             </com.shaubert.ui.phone.PhoneInputLayout>
+
+            <Button
+                android:id="@+id/validate"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:text="Validate"/>
 
             <Button
                 android:id="@+id/set_random_phone"

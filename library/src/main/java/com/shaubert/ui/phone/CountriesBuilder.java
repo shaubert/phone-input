@@ -1,23 +1,16 @@
 package com.shaubert.ui.phone;
 
-import android.util.Log;
-import com.google.i18n.phonenumbers.CountryCodeToRegionCodeMap;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.PhoneNumberUtilProxy;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.*;
 
 class CountriesBuilder {
 
-    public static final String TAG = CountriesBuilder.class.getSimpleName();
-
-    private static Field countryCallingCodeToRegionCodeMapField;
-    private static Method getCountryCodeToRegionCodeMapMethod;
     private static Map<String, Integer> regionToCodeMap;
 
     static int getCountyCode(String countryIso) {
-        Map<String, Integer> codesWithReflection = getCountryCodesWithReflection();
+        Map<String, Integer> codesWithReflection = getCountryCodesWithProxy();
         if (codesWithReflection != null) {
             return codesWithReflection.get(countryIso);
         }
@@ -29,7 +22,7 @@ class CountriesBuilder {
     static List<Country> createCountriesList(boolean loadCountryCodes) {
         List<Country> countries = null;
         if (loadCountryCodes) {
-            countries = createCountriesListWithReflection();
+            countries = createCountriesListWithProxy();
         }
         if (countries == null) {
             countries = createCountriesListWithMetadata();
@@ -48,8 +41,8 @@ class CountriesBuilder {
     }
 
     @SuppressWarnings("unchecked")
-    static List<Country> createCountriesListWithReflection() {
-        Map<String, Integer> regionToCodeMap = getCountryCodesWithReflection();
+    static List<Country> createCountriesListWithProxy() {
+        Map<String, Integer> regionToCodeMap = getCountryCodesWithProxy();
         if (regionToCodeMap == null) {
             return null;
         }
@@ -62,16 +55,12 @@ class CountriesBuilder {
         return countries;
     }
 
-    static synchronized Map<String, Integer> getCountryCodesWithReflection() {
+    static synchronized Map<String, Integer> getCountryCodesWithProxy() {
         if (regionToCodeMap != null) {
             return regionToCodeMap;
         }
 
         Map<Integer, List<String>> countryCodeToRegionCodeMap = getCountyCodeToRegionCodeMap();
-        if (countryCodeToRegionCodeMap == null) {
-            return null;
-        }
-
         PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
         Set<Integer> globalNetworkCallingCodes = phoneNumberUtil.getSupportedGlobalNetworkCallingCodes();
 
@@ -93,32 +82,7 @@ class CountriesBuilder {
 
     @SuppressWarnings("unchecked")
     private static Map<Integer, List<String>> getCountyCodeToRegionCodeMap() {
-        PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
-        try {
-            if (countryCallingCodeToRegionCodeMapField == null) {
-                countryCallingCodeToRegionCodeMapField = PhoneNumberUtil.class.getDeclaredField("countryCallingCodeToRegionCodeMap");
-            }
-            if (countryCallingCodeToRegionCodeMapField != null) {
-                countryCallingCodeToRegionCodeMapField.setAccessible(true);
-                return (Map<Integer, List<String>>) countryCallingCodeToRegionCodeMapField.get(phoneNumberUtil);
-            }
-        } catch (Exception ex) {
-            Log.d(TAG, "failed to fast load countries list from field");
-        }
-
-        try {
-            if (getCountryCodeToRegionCodeMapMethod == null) {
-                getCountryCodeToRegionCodeMapMethod = CountryCodeToRegionCodeMap.class.getDeclaredMethod("getCountryCodeToRegionCodeMap");
-            }
-            if (getCountryCodeToRegionCodeMapMethod != null) {
-                getCountryCodeToRegionCodeMapMethod.setAccessible(true);
-                return (Map<Integer, List<String>>) getCountryCodeToRegionCodeMapMethod.invoke(CountryCodeToRegionCodeMap.class);
-            }
-        } catch (Exception ex) {
-            Log.d(TAG, "failed to fast load countries list from CountryCodeToRegionCodeMap");
-        }
-
-        return null;
+        return PhoneNumberUtilProxy.getCountryCodeToRegionCodeMap();
     }
 
 }
