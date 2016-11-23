@@ -94,7 +94,7 @@ public class PhoneInputMaskedMETEditText extends MaskedMETEditText implements Ph
 
     @Override
     public void setPhoneNumberString(@Nullable String phoneNumber) {
-        Phonenumber.PhoneNumber number = delegate.getPhoneNumber(phoneNumber);
+        Phonenumber.PhoneNumber number = delegate.parsePhoneNumber(phoneNumber);
         if (number != null) {
             setPhoneNumber(number);
         } else {

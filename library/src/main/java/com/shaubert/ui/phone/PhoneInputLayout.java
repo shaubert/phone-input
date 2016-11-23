@@ -141,7 +141,7 @@ public class PhoneInputLayout extends LinearLayout {
     }
 
     public void setPhoneNumberString(String phoneNumberStr) {
-        Phonenumber.PhoneNumber phoneNumber = PhoneInputDelegate.getPhoneNumber(phoneNumberStr, country);
+        Phonenumber.PhoneNumber phoneNumber = PhoneInputDelegate.getPhoneNumber(phoneNumberStr, country, false);
         if (phoneNumber != null) {
             setPhoneNumber(phoneNumber);
         } else {

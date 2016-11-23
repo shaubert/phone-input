@@ -209,10 +209,14 @@ public class PhoneInputDelegate {
     }
 
     public Phonenumber.PhoneNumber getPhoneNumber(String text) {
-        return getPhoneNumber(text, country);
+        return getPhoneNumber(text, country, true);
     }
 
-    public static Phonenumber.PhoneNumber getPhoneNumber(@Nullable String text, @Nullable Country country) {
+    public Phonenumber.PhoneNumber parsePhoneNumber(String text) {
+        return getPhoneNumber(text, country, false);
+    }
+
+    public static Phonenumber.PhoneNumber getPhoneNumber(@Nullable String text, @Nullable Country country, boolean validateAgainstCountry) {
         if (country == null) {
             return null;
         }
@@ -224,7 +228,9 @@ public class PhoneInputDelegate {
         try {
             String region = country.getIsoCode().toUpperCase(Locale.US);
             Phonenumber.PhoneNumber number = PhoneNumberUtil.getInstance().parse(text, region);
-            if (PhoneNumberUtil.getInstance().isValidNumberForRegion(number, region)) {
+            if (validateAgainstCountry && PhoneNumberUtil.getInstance().isValidNumberForRegion(number, region)) {
+                return number;
+            } else if (!validateAgainstCountry && PhoneNumberUtil.getInstance().isValidNumber(number)) {
                 return number;
             }
         } catch (NumberParseException ignored) {
@@ -241,7 +247,7 @@ public class PhoneInputDelegate {
     }
 
     public void setCountryFromPhoneNumber(String phoneNumber) {
-        Phonenumber.PhoneNumber number = getPhoneNumber(phoneNumber);
+        Phonenumber.PhoneNumber number = parsePhoneNumber(phoneNumber);
         if (number != null) {
             setCountryFromPhoneNumber(number);
         }

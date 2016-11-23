@@ -82,7 +82,7 @@ public class PhoneInputMaskedEditText extends MaskedEditText implements PhoneInp
 
     @Override
     public void setPhoneNumberString(@Nullable String phoneNumber) {
-        Phonenumber.PhoneNumber number = delegate.getPhoneNumber(phoneNumber);
+        Phonenumber.PhoneNumber number = delegate.parsePhoneNumber(phoneNumber);
         if (number != null) {
             setPhoneNumber(number);
         } else {
