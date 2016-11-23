@@ -42,7 +42,7 @@ public class Phones {
     }
 
     public static Country getCountyFromPhone(Phonenumber.PhoneNumber phoneNumber, Context context) {
-        String regionCode = PhoneNumberUtil.getInstance().getRegionCodeForCountryCode(phoneNumber.getCountryCode());
+        String regionCode = PhoneNumberUtil.getInstance().getRegionCodeForNumber(phoneNumber);
         return Countries.get(context).getCountryByIso(regionCode);
     }
 
