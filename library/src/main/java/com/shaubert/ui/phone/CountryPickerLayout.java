@@ -132,7 +132,7 @@ public class CountryPickerLayout extends LinearLayout implements CountryPickerVi
         if (iconView == null) return;
 
         if (iconResId != IconAndTextProvider.NO_RES_ID) {
-            iconView.setImageResource(iconResId);
+            iconView.setImageDrawable(delegate.getScaledIcon(iconResId));
         } else {
             iconView.setImageDrawable(null);
         }

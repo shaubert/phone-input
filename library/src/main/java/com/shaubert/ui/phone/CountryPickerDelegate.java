@@ -3,6 +3,8 @@ package com.shaubert.ui.phone;
 import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
@@ -26,12 +28,20 @@ public class CountryPickerDelegate implements CountryPickerView {
     private CountryPickerView view;
     private String restoredCountryIso;
 
+    private int iconSize;
+
     public CountryPickerDelegate(CountryPickerView view, AttributeSet attrs) {
         this.view = view;
         init(attrs);
     }
 
     private void init(AttributeSet attrs) {
+        if (attrs != null) {
+            TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.pi_CountryPickerView);
+            iconSize = typedArray.getDimensionPixelSize(R.styleable.pi_CountryPickerView_iconSize, -1);
+            typedArray.recycle();
+        }
+
         Activity activity = getActivity(getContext());
         if (!(activity instanceof FragmentActivity)) {
             throw new IllegalArgumentException("must be created with FragmentActivity");
@@ -46,6 +56,35 @@ public class CountryPickerDelegate implements CountryPickerView {
             }
         });
     }
+
+    @SuppressWarnings("deprecation")
+    public Drawable getScaledIcon(int resId) {
+        Drawable drawable;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            drawable = getContext().getDrawable(resId);
+        } else {
+            drawable = getContext().getResources().getDrawable(resId);
+        }
+
+        return getScaledIcon(drawable);
+    }
+
+    public Drawable getScaledIcon(Drawable drawable) {
+        if (drawable == null) return null;
+
+        int height = drawable.getIntrinsicHeight();
+        int width = drawable.getIntrinsicWidth();
+        if (height > 0 && width > 0 && iconSize > 0) {
+            float multiplier = Math.min((float)iconSize / width, (float)iconSize / height);
+            drawable.setBounds(0, 0,
+                    (int) (width * multiplier),
+                    (int) (height * multiplier));
+        } else {
+            drawable.setBounds(0, 0, width, height);
+        }
+        return drawable;
+    }
+
 
     private static Activity getActivity(Context context) {
         for (;
