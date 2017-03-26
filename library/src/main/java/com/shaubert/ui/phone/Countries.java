@@ -1,5 +1,6 @@
 package com.shaubert.ui.phone;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -22,6 +23,7 @@ public class Countries {
         }
     };
 
+    @SuppressLint("StaticFieldLeak")
     private static Countries instance;
 
     public static void get(final Context context, final Callback callback) {
@@ -100,18 +102,18 @@ public class Countries {
     public int getFlagResId(Country country) {
         int countryResId = getCountryResId(appContext, country);
         if (countryResId == 0) {
-            countryResId = R.mipmap.unknown_flag;
+            countryResId = R.drawable.unknown_flag;
         }
         return countryResId;
     }
 
     private static int getCountryResId(Context context, Country country) {
-        return getMipmapResId(context, country.getIsoCode().toLowerCase(Locale.ENGLISH) + "_flag");
+        return getDrawableResId(context, country.getIsoCode().toLowerCase(Locale.ENGLISH) + "_flag");
     }
 
-    private static int getMipmapResId(Context context, String drawableName) {
+    private static int getDrawableResId(Context context, String drawableName) {
         return context.getResources().getIdentifier(
-                drawableName.toLowerCase(Locale.ENGLISH), "mipmap", context.getPackageName());
+                drawableName.toLowerCase(Locale.ENGLISH), "drawable", context.getPackageName());
     }
 
     public interface Callback {

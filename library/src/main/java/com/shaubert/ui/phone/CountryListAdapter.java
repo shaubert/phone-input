@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class CountryListAdapter extends RecyclerView.Adapter<ItemCountryPresenter> {
 
@@ -76,7 +77,7 @@ public class CountryListAdapter extends RecyclerView.Adapter<ItemCountryPresente
             String countryStr = country.getIsoCode()
                     + " " + countries.getDisplayCountryName(country)
                     + " +" + country.getCountryCode();
-            result = countryStr.toLowerCase().contains(query.toLowerCase());
+            result = countryStr.toLowerCase(Locale.getDefault()).contains(query.toLowerCase(Locale.getDefault()));
         }
 
         return result;

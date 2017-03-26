@@ -94,11 +94,11 @@ public class PhoneInputLayout extends LinearLayout {
         this.countryPicker.setCountry(country);
         this.countryPicker.setOnCountryChangedListener(new CountryPickerView.OnCountryChangedListener() {
             @Override
-            public void onCountryChanged(@Nullable Country country) {
+            public void onCountryChanged(@Nullable Country country, boolean fromUser) {
                 if (innerCountryChange) return;
 
                 setCountry(country);
-                if (phoneInput != null) ((View) phoneInput).requestFocus();
+                if (phoneInput != null && fromUser) ((View) phoneInput).requestFocus();
             }
         });
     }

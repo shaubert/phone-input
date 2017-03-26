@@ -2,12 +2,13 @@ package com.shaubert.ui.phone;
 
 import android.content.Context;
 import android.os.Parcelable;
+import android.support.v7.widget.AppCompatEditText;
 import android.util.AttributeSet;
 import android.widget.EditText;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 
-public class PhoneInputEditText extends EditText implements PhoneInputView {
+public class PhoneInputEditText extends AppCompatEditText implements PhoneInputView {
 
     private PhoneInputDelegate delegate;
     private CustomPhoneNumberFormattingTextWatcher formattingTextWatcher;

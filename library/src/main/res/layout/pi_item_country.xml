@@ -16,7 +16,6 @@
         android:id="@+id/icon"
         android:layout_width="36dp"
         android:layout_height="36dp"
-        android:src="@mipmap/fr_flag"
         android:scaleType="fitCenter"/>
 
     <TextView
@@ -25,7 +24,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_weight="1"
-        android:text="France"
         android:textAppearance="?android:attr/textAppearanceListItem"/>
 
 </LinearLayout>

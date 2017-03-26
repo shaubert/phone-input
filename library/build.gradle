@@ -1,20 +1,20 @@
 apply plugin: 'com.android.library'
 
 dependencies {
-    compile "com.android.support:support-v4:23.1.1"
-    compile "com.android.support:recyclerview-v7:23.1.1"
-    compile 'com.android.support:appcompat-v7:23.1.1'
+    compile "com.android.support:support-v4:25.3.0"
+    compile "com.android.support:recyclerview-v7:25.3.0"
+    compile 'com.android.support:appcompat-v7:25.3.0'
 
-    compile 'com.googlecode.libphonenumber:libphonenumber:7.7.2'
+    compile 'com.googlecode.libphonenumber:libphonenumber:8.3.3'
 }
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion '23.0.3'
+    compileSdkVersion 25
+    buildToolsVersion '25.0.2'
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 23
+        targetSdkVersion 25
     }
 }
 

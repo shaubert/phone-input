@@ -109,7 +109,7 @@ public class CountryPickerDelegate implements CountryPickerView {
             countryPickerDialogManager.setCallbacks(new CountryPickerCallbacks() {
                 @Override
                 public void onCountrySelected(Country country, int flagResId) {
-                    setCountry(country);
+                    setCountryInternal(country, true);
                 }
             });
         }
@@ -134,6 +134,10 @@ public class CountryPickerDelegate implements CountryPickerView {
 
     @Override
     public void setCountry(Country country) {
+        setCountryInternal(country, false);
+    }
+
+    private void setCountryInternal(Country country, boolean fromUser) {
         if (countriesFilter != null
                 && country != null
                 && !countriesFilter.filter(country)) {
@@ -146,7 +150,7 @@ public class CountryPickerDelegate implements CountryPickerView {
 
         this.country = country;
         if (onCountryChangedListener != null) {
-            onCountryChangedListener.onCountryChanged(country);
+            onCountryChangedListener.onCountryChanged(country, fromUser);
         }
     }
 

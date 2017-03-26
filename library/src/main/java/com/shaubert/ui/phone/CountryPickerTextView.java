@@ -4,8 +4,8 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.ViewUtils;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -34,10 +34,10 @@ public class CountryPickerTextView extends AppCompatTextView implements CountryP
         delegate = new CountryPickerDelegate(this, attrs);
         delegate.setOnCountryChangedListener(new OnCountryChangedListener() {
             @Override
-            public void onCountryChanged(@Nullable Country country) {
+            public void onCountryChanged(@Nullable Country country, boolean fromUser) {
                 refreshCountry();
                 if (onCountryChangedListener != null) {
-                    onCountryChangedListener.onCountryChanged(country);
+                    onCountryChangedListener.onCountryChanged(country, fromUser);
                 }
             }
         });
@@ -83,7 +83,7 @@ public class CountryPickerTextView extends AppCompatTextView implements CountryP
 
             int flagResId = iconAndTextProvider.getIconResId(delegate.getCountries(), country);
             Drawable scaledIcon = delegate.getScaledIcon(flagResId);
-            if (ViewUtils.isLayoutRtl(this)) {
+            if (ViewCompat.getLayoutDirection(this) == ViewCompat.LAYOUT_DIRECTION_RTL) {
                 setCompoundDrawables(null, scaledIcon, null, null);
             } else {
                 setCompoundDrawables(scaledIcon, null, null, null);

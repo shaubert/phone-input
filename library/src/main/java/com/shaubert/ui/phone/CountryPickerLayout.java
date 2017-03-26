@@ -46,10 +46,10 @@ public class CountryPickerLayout extends LinearLayout implements CountryPickerVi
         delegate = new CountryPickerDelegate(this, attrs);
         delegate.setOnCountryChangedListener(new OnCountryChangedListener() {
             @Override
-            public void onCountryChanged(@Nullable Country country) {
+            public void onCountryChanged(@Nullable Country country, boolean fromUser) {
                 refreshCountry();
                 if (onCountryChangedListener != null) {
-                    onCountryChangedListener.onCountryChanged(country);
+                    onCountryChangedListener.onCountryChanged(country, fromUser);
                 }
             }
         });
