@@ -15,6 +15,8 @@ public interface CountryPickerView {
 
     void setCountriesFilter(CountriesFilter countriesFilter);
 
+    void setHideKeyboardOnDismiss(boolean hideKeyboardOnDismiss);
+
     interface OnCountryChangedListener {
         void onCountryChanged(@Nullable Country country, boolean fromUser);
     }

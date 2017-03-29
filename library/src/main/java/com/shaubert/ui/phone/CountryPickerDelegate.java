@@ -75,7 +75,7 @@ public class CountryPickerDelegate implements CountryPickerView {
         int height = drawable.getIntrinsicHeight();
         int width = drawable.getIntrinsicWidth();
         if (height > 0 && width > 0 && iconSize > 0) {
-            float multiplier = Math.min((float)iconSize / width, (float)iconSize / height);
+            float multiplier = Math.min((float) iconSize / width, (float) iconSize / height);
             drawable.setBounds(0, 0,
                     (int) (width * multiplier),
                     (int) (height * multiplier));
@@ -85,11 +85,11 @@ public class CountryPickerDelegate implements CountryPickerView {
         return drawable;
     }
 
-
     private static Activity getActivity(Context context) {
         for (;
              context instanceof ContextWrapper && !(context instanceof Activity);
-             context = ((ContextWrapper) context).getBaseContext());
+             context = ((ContextWrapper) context).getBaseContext())
+            ;
         if (context instanceof Activity) {
             return (Activity) context;
         }
@@ -167,6 +167,12 @@ public class CountryPickerDelegate implements CountryPickerView {
         countryPickerDialogManager.setCountriesFilter(countriesFilter);
 
         setCountry(country);
+    }
+
+    @Override
+    public void setHideKeyboardOnDismiss(boolean hideKeyboardOnDismiss) {
+        setupDialogManager();
+        countryPickerDialogManager.setHideKeyboardOnDismiss(hideKeyboardOnDismiss);
     }
 
     public void dispatchOnRestoreInstanceState(Parcelable state) {

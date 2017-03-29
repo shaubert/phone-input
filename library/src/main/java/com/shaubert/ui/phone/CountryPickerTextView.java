@@ -105,6 +105,11 @@ public class CountryPickerTextView extends AppCompatTextView implements CountryP
     }
 
     @Override
+    public void setHideKeyboardOnDismiss(boolean hideKeyboardOnDismiss) {
+        delegate.setHideKeyboardOnDismiss(hideKeyboardOnDismiss);
+    }
+
+    @Override
     public void onRestoreInstanceState(Parcelable state) {
         BaseSavedState ss = (BaseSavedState) state;
         super.onRestoreInstanceState(ss.getSuperState());

@@ -11,6 +11,7 @@ import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 
 /**
  * Created by GODARD Tuatini on 07/05/15.
@@ -28,6 +29,7 @@ public class CountryPickerDialog extends AppCompatDialog {
     private String scrollToCountryIsoCode;
 
     private Handler handler;
+    private boolean hideKeyboardOnDismiss;
 
     public CountryPickerDialog(Context context) {
         this(context, null);
@@ -137,6 +139,27 @@ public class CountryPickerDialog extends AppCompatDialog {
         }
     }
 
+    @Override
+    public void dismiss() {
+        hideKeyboardOnDismissMaybe();
+        super.dismiss();
+    }
+
+    @Override
+    public void hide() {
+        hideKeyboardOnDismissMaybe();
+        super.hide();
+    }
+
+    private void hideKeyboardOnDismissMaybe() {
+        if (!hideKeyboardOnDismiss) return;
+        if (searchView == null) return;
+
+        InputMethodManager imm = (InputMethodManager) searchView.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(searchView.getApplicationWindowToken(), 0);
+    }
+
     private void filterCountries() {
         adapter.setQuery(searchView.getQuery().toString());
     }
@@ -158,6 +181,10 @@ public class CountryPickerDialog extends AppCompatDialog {
                 break;
             }
         }
+    }
+
+    public void setHideKeyboardOnDismiss(boolean hideKeyboardOnDismiss) {
+        this.hideKeyboardOnDismiss = hideKeyboardOnDismiss;
     }
 
 }

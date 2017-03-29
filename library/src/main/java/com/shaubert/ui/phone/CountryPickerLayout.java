@@ -150,6 +150,11 @@ public class CountryPickerLayout extends LinearLayout implements CountryPickerVi
     }
 
     @Override
+    public void setHideKeyboardOnDismiss(boolean hideKeyboardOnDismiss) {
+        delegate.setHideKeyboardOnDismiss(hideKeyboardOnDismiss);
+    }
+
+    @Override
     protected void onRestoreInstanceState(Parcelable state) {
         BaseSavedState ss = (BaseSavedState) state;
         super.onRestoreInstanceState(ss.getSuperState());

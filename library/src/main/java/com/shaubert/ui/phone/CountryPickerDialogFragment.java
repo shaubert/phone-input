@@ -10,6 +10,7 @@ public class CountryPickerDialogFragment extends AppCompatDialogFragment {
     private CountryPickerCallbacks callbacks;
     private String scrollToCountryIsoCode;
     private CountriesFilter countriesFilter;
+    private boolean hideKeyboardOnDismiss;
 
     public void setCallbacks(CountryPickerCallbacks callbacks) {
         this.callbacks = callbacks;
@@ -38,10 +39,20 @@ public class CountryPickerDialogFragment extends AppCompatDialogFragment {
         }
     }
 
+    public void setHideKeyboardOnDismiss(boolean hideKeyboardOnDismiss) {
+        this.hideKeyboardOnDismiss = hideKeyboardOnDismiss;
+
+        CountryPickerDialog dialog = getDialog();
+        if (dialog != null) {
+            dialog.setHideKeyboardOnDismiss(hideKeyboardOnDismiss);
+        }
+    }
+
     @Override
     public @NonNull Dialog onCreateDialog(Bundle savedInstanceState) {
         CountryPickerDialog pickerDialog = new CountryPickerDialog(getContext(), callbacks, scrollToCountryIsoCode);
         pickerDialog.setCountriesFilter(countriesFilter);
+        pickerDialog.setHideKeyboardOnDismiss(hideKeyboardOnDismiss);
         return pickerDialog;
     }
 

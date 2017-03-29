@@ -7,6 +7,7 @@ public class CountryPickerDialogManager {
     private CountryPickerCallbacks callbacks;
     private String scrollToCountryIsoCode;
     private CountriesFilter countriesFilter;
+    private boolean hideKeyboardOnDismiss;
 
     private String tag;
     private FragmentManager fragmentManager;
@@ -31,6 +32,11 @@ public class CountryPickerDialogManager {
         setCountriesFilter(countriesFilter, find());
     }
 
+    public void setHideKeyboardOnDismiss(boolean hideKeyboardOnDismiss) {
+        this.hideKeyboardOnDismiss = hideKeyboardOnDismiss;
+        setHideKeyboardOnDismiss(hideKeyboardOnDismiss, find());
+    }
+
     public void hide() {
         CountryPickerDialogFragment fragment = find();
         if (fragment != null) {
@@ -53,6 +59,7 @@ public class CountryPickerDialogManager {
         fragment.setCallbacks(callbacks);
         fragment.setScrollToCountryIsoCode(scrollToCountryIsoCode);
         fragment.setCountriesFilter(countriesFilter);
+        fragment.setHideKeyboardOnDismiss(hideKeyboardOnDismiss);
         return fragment;
     }
 
@@ -75,6 +82,12 @@ public class CountryPickerDialogManager {
     protected void setCountriesFilter(CountriesFilter countriesFilter, CountryPickerDialogFragment fragment) {
         if (fragment != null) {
             fragment.setCountriesFilter(countriesFilter);
+        }
+    }
+
+    protected void setHideKeyboardOnDismiss(boolean hideKeyboardOnDismiss, CountryPickerDialogFragment fragment) {
+        if (fragment != null) {
+            fragment.setHideKeyboardOnDismiss(hideKeyboardOnDismiss);
         }
     }
 
