@@ -16,6 +16,7 @@ public class Phones {
                 getRegionFromSim(context),
                 getRegionFromNetwork(context),
                 getRegionFromLocale(),
+                "US"
         };
     }
 
