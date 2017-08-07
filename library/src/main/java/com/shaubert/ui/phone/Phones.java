@@ -11,12 +11,26 @@ import java.util.Locale;
 
 public class Phones {
 
+    private static String FALLBACK_COUNTRY = "US";
+
+    public static String getFallbackCountry() {
+        return FALLBACK_COUNTRY;
+    }
+
+    public static void setFallbackCountry(String fallbackCountry) {
+        FALLBACK_COUNTRY = fallbackCountry;
+    }
+
     public static String[] getPossibleRegions(Context context) {
+        return getPossibleRegions(context, FALLBACK_COUNTRY);
+    }
+
+    public static String[] getPossibleRegions(Context context, String defaultCountry) {
         return new String[] {
                 getRegionFromSim(context),
                 getRegionFromNetwork(context),
                 getRegionFromLocale(),
-                "US"
+                defaultCountry
         };
     }
 
