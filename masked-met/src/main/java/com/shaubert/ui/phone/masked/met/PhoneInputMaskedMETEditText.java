@@ -65,25 +65,17 @@ public class PhoneInputMaskedMETEditText extends MaskedMETEditText implements Ph
 
     @Override
     public @Nullable String getFormattedPhoneNumber(PhoneNumberUtil.PhoneNumberFormat format) {
-        if (isMaskFilled()) {
-            return delegate.getFormattedPhoneNumber(getText().toString(), format);
-        } else {
-            return null;
-        }
+        return delegate.getFormattedPhoneNumber(getTextFromMask(), format);
     }
 
     @Override
     public boolean isValidPhoneNumber() {
-        return isMaskFilled() && delegate.isValidPhoneNumber(getText().toString());
+        return delegate.isValidPhoneNumber(getTextFromMask());
     }
 
     @Override
     public @Nullable Phonenumber.PhoneNumber getPhoneNumber() {
-        if (isMaskFilled()) {
-            return delegate.getPhoneNumber(getText().toString());
-        } else {
-            return null;
-        }
+        return delegate.getPhoneNumber(getTextFromMask());
     }
 
     @Override
