@@ -1,6 +1,5 @@
 package com.shaubert.ui.phone.sample;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -30,7 +29,7 @@ public class PhoneInputsSampleFragment extends Fragment {
         pickerDialogManager = new CountryPickerDialogManager("country-picker", getChildFragmentManager());
         pickerDialogManager.setCallbacks(new CountryPickerCallbacks() {
             @Override
-            public void onCountrySelected(Country country, int flagResId) {
+            public void onCountrySelected(Country country) {
                 setSelectedCountry(country);
             }
         });
@@ -41,9 +40,9 @@ public class PhoneInputsSampleFragment extends Fragment {
         View view = inflater.inflate(R.layout.phone_inputs_sample, container, false);
 
         phoneInputs = new PhoneInputView[] {
-                (PhoneInputView) view.findViewById(R.id.phone_input_edit_text),
-                (PhoneInputView) view.findViewById(R.id.phone_input_masked_edit_text),
-                (PhoneInputView) view.findViewById(R.id.phone_input_masked_met_edit_text),
+                view.findViewById(R.id.phone_input_edit_text),
+                view.findViewById(R.id.phone_input_masked_edit_text),
+                view.findViewById(R.id.phone_input_masked_met_edit_text),
         };
 
         ((CheckBox) view.findViewById(R.id.national_format)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -57,7 +56,7 @@ public class PhoneInputsSampleFragment extends Fragment {
             }
         });
 
-        pickCountryButton = (Button) view.findViewById(R.id.pick_country);
+        pickCountryButton = view.findViewById(R.id.pick_country);
         pickCountryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,7 +67,7 @@ public class PhoneInputsSampleFragment extends Fragment {
             }
         });
 
-        setRandomPhoneButton = (Button) view.findViewById(R.id.set_random_phone);
+        setRandomPhoneButton = view.findViewById(R.id.set_random_phone);
         setRandomPhoneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,12 +112,7 @@ public class PhoneInputsSampleFragment extends Fragment {
     public void setSelectedCountry(Country selectedCountry) {
         this.selectedCountry = selectedCountry;
 
-        Countries countries = Countries.get(getContext());
-        Drawable drawable = getResources().getDrawable(countries.getFlagResId(selectedCountry));
-        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-        pickCountryButton.setCompoundDrawables(drawable, null, null, null);
-        pickCountryButton.setText(countries.getDisplayCountryName(selectedCountry));
-
+        pickCountryButton.setText(selectedCountry.getUnicodeSymbol() + " " + selectedCountry.getDisplayName());
         for (PhoneInputView input : phoneInputs) {
             input.setCountry(selectedCountry);
         }

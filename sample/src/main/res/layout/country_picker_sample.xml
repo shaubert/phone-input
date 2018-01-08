@@ -6,18 +6,12 @@
     android:orientation="vertical"
     android:gravity="center">
 
-        <com.shaubert.ui.phone.CountryPickerImageButton
-            android:id="@+id/pick_country"
-            android:layout_width="250dp"
-            android:layout_height="150dp"/>
-
         <com.shaubert.ui.phone.CountryPickerTextView
-            android:id="@+id/pick_country_layout"
+            android:id="@+id/pick_country_textview"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:drawablePadding="8dp"
-            app:iconSize="24dp"
             style="@style/Widget.AppCompat.Spinner.Underlined"/>
 
 </LinearLayout>

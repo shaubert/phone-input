@@ -75,7 +75,7 @@ public class CountryListAdapter extends RecyclerView.Adapter<ItemCountryPresente
 
         if (result && !TextUtils.isEmpty(query)) {
             String countryStr = country.getIsoCode()
-                    + " " + countries.getDisplayCountryName(country)
+                    + " " + country.getDisplayName()
                     + " +" + country.getCountryCode();
             result = countryStr.toLowerCase(Locale.getDefault()).contains(query.toLowerCase(Locale.getDefault()));
         }
@@ -107,7 +107,7 @@ public class CountryListAdapter extends RecyclerView.Adapter<ItemCountryPresente
 
     @Override
     public void onBindViewHolder(ItemCountryPresenter holder, int position) {
-        holder.swapData(getItem(position), countries);
+        holder.swapData(getItem(position));
     }
 
     @Override

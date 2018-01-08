@@ -10,21 +10,26 @@ import android.widget.Toast;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 import com.shaubert.ui.phone.Countries;
+import com.shaubert.ui.phone.CountryPickerTextView;
 import com.shaubert.ui.phone.PhoneInputLayout;
 
 public class PhoneInputLayoutSampleFragment extends Fragment {
 
     private Button setRandomPhoneButton;
     private Button validatePhoneButton;
+    private CountryPickerTextView countryPickerTextView;
     private PhoneInputLayout phoneInputLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.phone_input_layout_sample, container, false);
 
-        phoneInputLayout = (PhoneInputLayout) view.findViewById(R.id.phone_input_layout);
+        countryPickerTextView = view.findViewById(R.id.country_textview);
+        countryPickerTextView.setTextProvider(new CountryPickerTextView.OnlyIconTextProvider());
 
-        setRandomPhoneButton = (Button) view.findViewById(R.id.set_random_phone);
+        phoneInputLayout = view.findViewById(R.id.phone_input_layout);
+
+        setRandomPhoneButton = view.findViewById(R.id.set_random_phone);
         setRandomPhoneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -32,7 +37,7 @@ public class PhoneInputLayoutSampleFragment extends Fragment {
             }
         });
 
-        validatePhoneButton = (Button) view.findViewById(R.id.validate);
+        validatePhoneButton = view.findViewById(R.id.validate);
         validatePhoneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

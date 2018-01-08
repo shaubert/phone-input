@@ -12,11 +12,13 @@
     android:gravity="center_vertical"
     android:orientation="horizontal" >
 
-    <ImageView
+    <TextView
         android:id="@+id/icon"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:scaleType="fitCenter"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30dp"
+        android:includeFontPadding="false"
+        android:textColor="?android:attr/textColorPrimary"/>
 
     <TextView
         android:id="@+id/name"

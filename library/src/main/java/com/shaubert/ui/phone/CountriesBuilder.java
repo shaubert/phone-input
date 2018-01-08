@@ -1,5 +1,6 @@
 package com.shaubert.ui.phone;
 
+import android.content.Context;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.PhoneNumberUtilProxy;
 
@@ -19,29 +20,29 @@ class CountriesBuilder {
         return phoneNumberUtil.getCountryCodeForRegion(countryIso);
     }
 
-    static List<Country> createCountriesList(boolean loadCountryCodes) {
+    static List<Country> createCountriesList(Context context, boolean loadCountryCodes) {
         List<Country> countries = null;
         if (loadCountryCodes) {
-            countries = createCountriesListWithProxy();
+            countries = createCountriesListWithProxy(context);
         }
         if (countries == null) {
-            countries = createCountriesListWithMetadata();
+            countries = createCountriesListWithMetadata(context);
         }
         return countries;
     }
 
-    static List<Country> createCountriesListWithMetadata() {
+    static List<Country> createCountriesListWithMetadata(Context context) {
         PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
         Set<String> regions = phoneNumberUtil.getSupportedRegions();
         List<Country> countries = new ArrayList<>(regions.size());
         for (String region : regions) {
-            countries.add(new Country(region));
+            countries.add(new Country(region, context));
         }
         return countries;
     }
 
     @SuppressWarnings("unchecked")
-    static List<Country> createCountriesListWithProxy() {
+    static List<Country> createCountriesListWithProxy(Context context) {
         Map<String, Integer> regionToCodeMap = getCountryCodesWithProxy();
         if (regionToCodeMap == null) {
             return null;
@@ -49,7 +50,7 @@ class CountriesBuilder {
 
         List<Country> countries = new ArrayList<>(regionToCodeMap.size());
         for (Map.Entry<String, Integer> entry : regionToCodeMap.entrySet()) {
-            countries.add(new Country(entry.getKey(), entry.getValue()));
+            countries.add(new Country(entry.getKey(), entry.getValue(), context));
         }
 
         return countries;

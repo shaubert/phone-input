@@ -22,18 +22,14 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical">
 
-                <com.shaubert.ui.phone.CountryPickerLayout
-                    android:id="@+id/input_layout_picker"
+                <com.shaubert.ui.phone.CountryPickerTextView
+                    android:id="@+id/country_textview"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:background="?android:attr/selectableItemBackground">
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="fitCenter"/>
-
-                </com.shaubert.ui.phone.CountryPickerLayout>
+                    android:textSize="24dp"
+                    android:gravity="center"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:background="?android:attr/selectableItemBackground"/>
 
                 <com.shaubert.ui.phone.masked.PhoneInputMaskedEditText
                     android:id="@+id/input_layout_edittext"

@@ -1,13 +1,13 @@
 apply plugin: 'com.android.library'
 
 dependencies {
-    compile project(':library')
-    compile 'com.shaubert.maskedinput:library:1.2.9'
+    api project(':library')
+    implementation 'com.shaubert.maskedinput:library:1.2.9'
 }
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.2'
+    compileSdkVersion 26
+    buildToolsVersion '26.0.2'
 
     defaultConfig {
         minSdkVersion 14

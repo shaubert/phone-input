@@ -13,7 +13,7 @@ public class CountryPickerSampleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.country_picker_sample, container, false);
 
-        ((CountryPickerView) view.findViewById(R.id.pick_country)).setHideKeyboardOnDismiss(true);
+        ((CountryPickerView) view.findViewById(R.id.pick_country_textview)).setHideKeyboardOnDismiss(true);
 
         return view;
     }

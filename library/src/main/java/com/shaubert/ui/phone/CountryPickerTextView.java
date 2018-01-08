@@ -1,10 +1,8 @@
 package com.shaubert.ui.phone;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 import android.view.View;
@@ -13,7 +11,7 @@ public class CountryPickerTextView extends AppCompatTextView implements CountryP
 
     private CountryPickerDelegate delegate;
     private OnCountryChangedListener onCountryChangedListener;
-    private CountryPickerLayout.IconAndTextProvider iconAndTextProvider = new CountryPickerLayout.DefaultIconAndTextProvider();
+    private TextProvider textProvider = new DefaultTextProvider();
 
     public CountryPickerTextView(Context context) {
         super(context);
@@ -51,8 +49,8 @@ public class CountryPickerTextView extends AppCompatTextView implements CountryP
         });
     }
 
-    public void setIconAndTextProvider(CountryPickerLayout.IconAndTextProvider iconAndTextProvider) {
-        this.iconAndTextProvider = iconAndTextProvider;
+    public void setTextProvider(TextProvider textProvider) {
+        this.textProvider = textProvider;
         refreshCountry();
     }
 
@@ -79,17 +77,8 @@ public class CountryPickerTextView extends AppCompatTextView implements CountryP
     private void refreshCountry() {
         Country country = delegate.getCountry();
         if (country != null) {
-            setText(iconAndTextProvider.getName(delegate.getCountries(), country));
-
-            int flagResId = iconAndTextProvider.getIconResId(delegate.getCountries(), country);
-            Drawable scaledIcon = delegate.getScaledIcon(flagResId);
-            if (ViewCompat.getLayoutDirection(this) == ViewCompat.LAYOUT_DIRECTION_RTL) {
-                setCompoundDrawables(null, scaledIcon, null, null);
-            } else {
-                setCompoundDrawables(scaledIcon, null, null, null);
-            }
+            setText(textProvider.getName(country));
         } else {
-            setCompoundDrawables(null, null, null, null);
             setText(null);
         }
     }
@@ -120,6 +109,28 @@ public class CountryPickerTextView extends AppCompatTextView implements CountryP
     public Parcelable onSaveInstanceState() {
         Parcelable superState = super.onSaveInstanceState();
         return delegate.dispatchOnSaveInstanceState(superState);
+    }
+
+    interface TextProvider {
+        CharSequence getName(@Nullable Country country);
+    }
+
+    public static class DefaultTextProvider implements TextProvider {
+        @Override
+        public CharSequence getName(@Nullable Country country) {
+            return country != null
+                    ? country.getUnicodeSymbol() + " " + country.getDisplayName()
+                    : null;
+        }
+    }
+
+    public static class OnlyIconTextProvider implements TextProvider {
+        @Override
+        public CharSequence getName(@Nullable Country country) {
+            return country != null
+                    ? country.getUnicodeSymbol()
+                    : null;
+        }
     }
 
 }
