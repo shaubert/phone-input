@@ -111,7 +111,7 @@ public class CountryPickerTextView extends AppCompatTextView implements CountryP
         return delegate.dispatchOnSaveInstanceState(superState);
     }
 
-    interface TextProvider {
+    public interface TextProvider {
         CharSequence getName(@Nullable Country country);
     }
 
