@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -27,6 +28,7 @@ public class CountryListAdapter extends RecyclerView.Adapter<ItemCountryPresente
         countriesList.clear();
         if (countries != null) {
             countriesList.addAll(countries.getCountries());
+            Collections.sort(countriesList);
         }
 
         notifyDataSetChanged();

@@ -70,7 +70,14 @@ public class Country implements Comparable<Country> {
 
     public String getDisplayName() {
         synchronized (DISPLAY_COUNTRY_NAMES_CACHE) {
-            String newLanguage = appContext.getResources().getConfiguration().locale.getLanguage();
+            String newLanguage = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                appContext.getResources().getConfiguration().getLocales().get(0).getLanguage();
+            } else {
+                newLanguage = appContext.getResources().getConfiguration().locale.getLanguage();
+            }
+            if (newLanguage == null) newLanguage = Locale.getDefault().getLanguage();
+
             if (!TextUtils.equals(newLanguage, language)) {
                 DISPLAY_COUNTRY_NAMES_CACHE.clear();
                 language = newLanguage;
