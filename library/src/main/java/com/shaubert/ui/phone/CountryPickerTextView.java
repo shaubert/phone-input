@@ -10,7 +10,7 @@ import android.view.View;
 public class CountryPickerTextView extends AppCompatTextView implements CountryPickerView {
 
     private CountryPickerDelegate delegate;
-    private OnCountryChangedListener onCountryChangedListener;
+    private CountryChangedListener countryChangedListener;
     private TextProvider textProvider = new DefaultTextProvider();
 
     public CountryPickerTextView(Context context) {
@@ -30,12 +30,12 @@ public class CountryPickerTextView extends AppCompatTextView implements CountryP
 
     private void init(AttributeSet attrs) {
         delegate = new CountryPickerDelegate(this, attrs);
-        delegate.setOnCountryChangedListener(new OnCountryChangedListener() {
+        delegate.setCountryChangedListener(new CountryChangedListener() {
             @Override
             public void onCountryChanged(@Nullable Country country, boolean fromUser) {
                 refreshCountry();
-                if (onCountryChangedListener != null) {
-                    onCountryChangedListener.onCountryChanged(country, fromUser);
+                if (countryChangedListener != null) {
+                    countryChangedListener.onCountryChanged(country, fromUser);
                 }
             }
         });
@@ -84,8 +84,8 @@ public class CountryPickerTextView extends AppCompatTextView implements CountryP
     }
 
     @Override
-    public void setOnCountryChangedListener(OnCountryChangedListener onCountryChangedListener) {
-        this.onCountryChangedListener = onCountryChangedListener;
+    public void setCountryChangedListener(CountryChangedListener countryChangedListener) {
+        this.countryChangedListener = countryChangedListener;
     }
 
     @Override

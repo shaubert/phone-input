@@ -20,7 +20,7 @@ public class CountryPickerDelegate implements CountryPickerView {
     private Countries countries;
 
     private CountryPickerDialogManager countryPickerDialogManager;
-    private OnCountryChangedListener onCountryChangedListener;
+    private CountryChangedListener countryChangedListener;
     private CountriesFilter countriesFilter;
 
     private CountryPickerView view;
@@ -111,14 +111,14 @@ public class CountryPickerDelegate implements CountryPickerView {
         }
 
         this.country = country;
-        if (onCountryChangedListener != null) {
-            onCountryChangedListener.onCountryChanged(country, fromUser);
+        if (countryChangedListener != null) {
+            countryChangedListener.onCountryChanged(country, fromUser);
         }
     }
 
     @Override
-    public void setOnCountryChangedListener(OnCountryChangedListener onCountryChangedListener) {
-        this.onCountryChangedListener = onCountryChangedListener;
+    public void setCountryChangedListener(CountryChangedListener countryChangedListener) {
+        this.countryChangedListener = countryChangedListener;
     }
 
     @Override

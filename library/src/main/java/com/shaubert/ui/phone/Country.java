@@ -112,6 +112,15 @@ public class Country implements Comparable<Country> {
     }
 
     @Override
+    public String toString() {
+        return "Country{" +
+                "isoCode='" + isoCode + '\'' +
+                ", unicodeSymbol='" + unicodeSymbol + '\'' +
+                ", countryCode=" + countryCode +
+                '}';
+    }
+
+    @Override
     public int compareTo(@NonNull Country o) {
         return getDisplayName().compareTo(o.getDisplayName());
     }

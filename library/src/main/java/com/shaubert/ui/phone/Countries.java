@@ -5,10 +5,14 @@ import android.content.Context;
 import android.os.Handler;
 import android.text.TextUtils;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 public class Countries {
-    private List<Country> countries = new ArrayList<>();
+    private List<Country> countries;
     private Map<String, Country> isoCountriesMap = new HashMap<>();
 
     @SuppressLint("StaticFieldLeak")
@@ -45,7 +49,7 @@ public class Countries {
     }
 
     private Countries(List<Country> countries) {
-        this.countries = countries;
+        this.countries = Collections.unmodifiableList(countries);
 
         for (Country country : countries) {
             isoCountriesMap.put(country.getIsoCode().toLowerCase(Locale.US), country);
@@ -53,7 +57,7 @@ public class Countries {
     }
 
     public List<Country> getCountries() {
-        return new ArrayList<>(countries);
+        return countries;
     }
 
     public Country getCountryByIso(String iso) {
@@ -61,6 +65,13 @@ public class Countries {
             return null;
         }
         return isoCountriesMap.get(iso.toLowerCase(Locale.US));
+    }
+
+    public Country getCountryByCode(int code) {
+        for (Country country : countries) {
+            if (country.getCountryCode() == code) return country;
+        }
+        return null;
     }
 
     public interface Callback {

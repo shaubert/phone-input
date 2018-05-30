@@ -1,6 +1,7 @@
 package com.shaubert.ui.phone;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
@@ -13,7 +14,7 @@ public interface PhoneInputView {
 
     @Nullable Character getMaskChar();
 
-    void setMask(@Nullable String mask);
+    void setMask(Mask mask);
 
     Country getDefaultCountry();
 
@@ -34,5 +35,19 @@ public interface PhoneInputView {
     void setPhoneNumber(@Nullable Phonenumber.PhoneNumber phoneNumber);
 
     void setPhoneNumberString(@Nullable String phoneNumber);
+
+    void setAutoChangeCountry(boolean autoChangeCountry);
+
+    void setDisplayCountryCode(boolean displayCountryCode);
+
+    void addTextChangeListener(TextChangeListener listener);
+
+    void removeTextChangeListener(TextChangeListener listener);
+
+    void setCountryChangeListener(CountryChangedListener countryChangeListener);
+
+    interface TextChangeListener {
+        void onTextChanged(@NonNull String text);
+    }
 
 }

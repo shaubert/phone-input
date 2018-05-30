@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 
@@ -84,6 +85,16 @@ public class PhoneInputLayout extends LinearLayout {
         }
         this.phoneInput = phoneInput;
         this.phoneInput.setCountry(country);
+        this.phoneInput.setCountryChangeListener(new CountryChangedListener() {
+            @Override
+            public void onCountryChanged(@Nullable Country country, boolean fromUser) {
+                if (innerCountryChange) return;
+
+                if (fromUser) {
+                    setCountry(country);
+                }
+            }
+        });
     }
 
     private void setCountryPicker(CountryPickerView countryPicker) {
@@ -92,7 +103,7 @@ public class PhoneInputLayout extends LinearLayout {
         }
         this.countryPicker = countryPicker;
         this.countryPicker.setCountry(country);
-        this.countryPicker.setOnCountryChangedListener(new CountryPickerView.OnCountryChangedListener() {
+        this.countryPicker.setCountryChangedListener(new CountryChangedListener() {
             @Override
             public void onCountryChanged(@Nullable Country country, boolean fromUser) {
                 if (innerCountryChange) return;
@@ -109,15 +120,14 @@ public class PhoneInputLayout extends LinearLayout {
         }
         this.country = country;
 
+        innerCountryChange = true;
         if (phoneInput != null) {
             phoneInput.setCountry(country);
         }
-
         if (countryPicker != null) {
-            innerCountryChange = true;
             countryPicker.setCountry(country);
-            innerCountryChange = false;
         }
+        innerCountryChange = false;
     }
 
     public Country getCountry() {

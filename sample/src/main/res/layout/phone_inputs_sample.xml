@@ -19,40 +19,40 @@
                 android:id="@+id/set_random_phone"
                 android:layout_width="260dp"
                 android:layout_height="wrap_content"
-                android:text="Set Random Phone"/>
+                android:text="Set Random Phone" />
 
             <Button
                 android:id="@+id/pick_country"
                 android:layout_width="260dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Pick Country"/>
+                android:text="Pick Country" />
 
             <CheckBox
                 android:id="@+id/national_format"
                 android:layout_width="260dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="National Format"
-                android:checked="true"/>
+                android:checked="true"
+                android:text="National Format" />
 
             <com.shaubert.ui.phone.PhoneInputEditText
                 android:id="@+id/phone_input_edit_text"
                 android:layout_width="260dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"/>
+                android:layout_marginTop="16dp" />
 
             <com.shaubert.ui.phone.masked.PhoneInputMaskedEditText
                 android:id="@+id/phone_input_masked_edit_text"
                 android:layout_width="260dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"/>
+                android:layout_marginTop="8dp" />
 
             <com.shaubert.ui.phone.masked.met.PhoneInputMaskedMETEditText
                 android:id="@+id/phone_input_masked_met_edit_text"
                 android:layout_width="260dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"/>
+                android:layout_marginTop="8dp" />
 
         </LinearLayout>
 

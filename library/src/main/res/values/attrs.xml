@@ -3,6 +3,8 @@
 
     <declare-styleable name="pi_PhoneInputStyle">
         <attr name="countryIso" format="string|reference"/>
+        <attr name="autoChangeCountry" format="boolean|reference"/>
+        <attr name="displayCountryCode" format="boolean|reference"/>
         <attr name="phoneNumberFormat" format="enum">
             <enum name="e164" value="0"/>
             <enum name="international" value="1"/>

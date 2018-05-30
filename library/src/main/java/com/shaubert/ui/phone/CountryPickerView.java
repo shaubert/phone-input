@@ -1,7 +1,6 @@
 package com.shaubert.ui.phone;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
 
 public interface CountryPickerView {
 
@@ -11,14 +10,10 @@ public interface CountryPickerView {
 
     void setCountry(Country country);
 
-    void setOnCountryChangedListener(OnCountryChangedListener listener);
+    void setCountryChangedListener(CountryChangedListener listener);
 
     void setCountriesFilter(CountriesFilter countriesFilter);
 
     void setHideKeyboardOnDismiss(boolean hideKeyboardOnDismiss);
-
-    interface OnCountryChangedListener {
-        void onCountryChanged(@Nullable Country country, boolean fromUser);
-    }
 
 }

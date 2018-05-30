@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.Parcelable;
 import android.support.v7.widget.AppCompatEditText;
 import android.util.AttributeSet;
-import android.widget.EditText;
+
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 
@@ -31,6 +31,7 @@ public class PhoneInputEditText extends AppCompatEditText implements PhoneInputV
     private void init(AttributeSet attrs) {
         delegate = new PhoneInputDelegate(this);
         delegate.init(attrs);
+        addTextChangedListener(delegate.createTextWatcher());
     }
 
     @Override
@@ -109,16 +110,34 @@ public class PhoneInputEditText extends AppCompatEditText implements PhoneInputV
     }
 
     @Override
-    public void setMask(String mask) {
-        setHint(mask);
-        if (formattingTextWatcher != null) {
-            removeTextChangedListener(formattingTextWatcher);
-            formattingTextWatcher = null;
-        }
-        Country country = delegate.getCountry();
-        if (country != null) {
-            formattingTextWatcher = new CustomPhoneNumberFormattingTextWatcher(country);
-            addTextChangedListener(formattingTextWatcher);
-        }
+    public void setMask(Mask mask) {
+        formattingTextWatcher = PlainEditTextMaskHelper.setMask(
+                this, delegate, mask, formattingTextWatcher);
     }
+
+    @Override
+    public void setAutoChangeCountry(boolean autoChangeCountry) {
+        delegate.setAutoChangeCountry(autoChangeCountry);
+    }
+
+    @Override
+    public void setDisplayCountryCode(boolean displayCountryCode) {
+        delegate.setDisplayCountryCode(displayCountryCode);
+    }
+
+    @Override
+    public void addTextChangeListener(TextChangeListener listener) {
+        delegate.addTextChangeListener(listener);
+    }
+
+    @Override
+    public void removeTextChangeListener(TextChangeListener listener) {
+        delegate.removeTextChangeListener(listener);
+    }
+
+    @Override
+    public void setCountryChangeListener(CountryChangedListener countryChangeListener) {
+        delegate.setCountryChangeListener(countryChangeListener);
+    }
+
 }

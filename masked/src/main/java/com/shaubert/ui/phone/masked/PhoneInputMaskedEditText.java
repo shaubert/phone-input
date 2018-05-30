@@ -32,6 +32,7 @@ public class PhoneInputMaskedEditText extends MaskedEditText implements PhoneInp
     private void init(AttributeSet attrs) {
         delegate = new PhoneInputDelegate(this);
         delegate.init(attrs);
+        addTextChangedListener(delegate.createTextWatcher());
     }
 
     @Override
@@ -139,4 +140,33 @@ public class PhoneInputMaskedEditText extends MaskedEditText implements PhoneInp
         return maskChar != null ? maskChar.getMaskChar() : null;
     }
 
+    @Override
+    public void setMask(Mask mask) {
+        setMask(mask.mask);
+    }
+
+    @Override
+    public void setAutoChangeCountry(boolean autoChangeCountry) {
+        delegate.setAutoChangeCountry(autoChangeCountry);
+    }
+
+    @Override
+    public void setDisplayCountryCode(boolean displayCountryCode) {
+        delegate.setDisplayCountryCode(displayCountryCode);
+    }
+
+    @Override
+    public void addTextChangeListener(TextChangeListener listener) {
+        delegate.addTextChangeListener(listener);
+    }
+
+    @Override
+    public void removeTextChangeListener(TextChangeListener listener) {
+        delegate.removeTextChangeListener(listener);
+    }
+
+    @Override
+    public void setCountryChangeListener(CountryChangedListener countryChangeListener) {
+        delegate.setCountryChangeListener(countryChangeListener);
+    }
 }

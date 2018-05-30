@@ -3,10 +3,18 @@ package com.shaubert.ui.phone.masked.met;
 import android.content.Context;
 import android.os.Parcelable;
 import android.util.AttributeSet;
+
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 import com.rengwuxian.materialedittext.MaterialEditText;
-import com.shaubert.ui.phone.*;
+import com.shaubert.ui.phone.Country;
+import com.shaubert.ui.phone.CountryChangedListener;
+import com.shaubert.ui.phone.CustomPhoneNumberFormattingTextWatcher;
+import com.shaubert.ui.phone.Mask;
+import com.shaubert.ui.phone.MaskBuilder;
+import com.shaubert.ui.phone.PhoneInputDelegate;
+import com.shaubert.ui.phone.PhoneInputView;
+import com.shaubert.ui.phone.PlainEditTextMaskHelper;
 
 public class PhoneInputMETEditText extends MaterialEditText implements PhoneInputView {
 
@@ -31,6 +39,7 @@ public class PhoneInputMETEditText extends MaterialEditText implements PhoneInpu
     private void init(AttributeSet attrs) {
         delegate = new PhoneInputDelegate(this);
         delegate.init(attrs);
+        addTextChangedListener(delegate.createTextWatcher());
     }
 
     @Override
@@ -109,16 +118,33 @@ public class PhoneInputMETEditText extends MaterialEditText implements PhoneInpu
     }
 
     @Override
-    public void setMask(String mask) {
-        setHint(mask);
-        if (formattingTextWatcher != null) {
-            removeTextChangedListener(formattingTextWatcher);
-            formattingTextWatcher = null;
-        }
-        Country country = delegate.getCountry();
-        if (country != null) {
-            formattingTextWatcher = new CustomPhoneNumberFormattingTextWatcher(country);
-            addTextChangedListener(formattingTextWatcher);
-        }
+    public void setMask(Mask mask) {
+        formattingTextWatcher = PlainEditTextMaskHelper.setMask(
+                this, delegate, mask, formattingTextWatcher);
+    }
+
+    @Override
+    public void setAutoChangeCountry(boolean autoChangeCountry) {
+        delegate.setAutoChangeCountry(autoChangeCountry);
+    }
+
+    @Override
+    public void setDisplayCountryCode(boolean displayCountryCode) {
+        delegate.setDisplayCountryCode(displayCountryCode);
+    }
+
+    @Override
+    public void addTextChangeListener(TextChangeListener listener) {
+        delegate.addTextChangeListener(listener);
+    }
+
+    @Override
+    public void removeTextChangeListener(TextChangeListener listener) {
+        delegate.removeTextChangeListener(listener);
+    }
+
+    @Override
+    public void setCountryChangeListener(CountryChangedListener countryChangeListener) {
+        delegate.setCountryChangeListener(countryChangeListener);
     }
 }

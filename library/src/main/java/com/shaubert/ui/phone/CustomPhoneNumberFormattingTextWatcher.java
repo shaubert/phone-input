@@ -27,6 +27,7 @@ public class CustomPhoneNumberFormattingTextWatcher implements TextWatcher {
 
     private AsYouTypeFormatter mFormatter;
     private Country country;
+    private boolean forceReformat;
 
     public CustomPhoneNumberFormattingTextWatcher(Country country) {
         setCountry(country);
@@ -38,6 +39,10 @@ public class CustomPhoneNumberFormattingTextWatcher implements TextWatcher {
         mFormatter = PhoneNumberUtil.getInstance().getAsYouTypeFormatter(country.getIsoCode().toUpperCase(Locale.US));
     }
 
+    public void setForceReformat(boolean forceReformat) {
+        this.forceReformat = forceReformat;
+    }
+
     public Country getCountry() {
         return country;
     }
@@ -45,7 +50,7 @@ public class CustomPhoneNumberFormattingTextWatcher implements TextWatcher {
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count,
                                   int after) {
-        if (mSelfChange || mStopFormatting) {
+        if (mSelfChange || mStopFormatting || forceReformat) {
             return;
         }
         // If the user manually deleted any non-dialable characters, stop formatting
@@ -56,7 +61,7 @@ public class CustomPhoneNumberFormattingTextWatcher implements TextWatcher {
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        if (mSelfChange || mStopFormatting) {
+        if (mSelfChange || mStopFormatting || forceReformat) {
             return;
         }
         // If the user inserted any non-dialable characters, stop formatting
@@ -68,7 +73,7 @@ public class CustomPhoneNumberFormattingTextWatcher implements TextWatcher {
     @Override
     @SuppressLint("NewApi")
     public synchronized void afterTextChanged(Editable s) {
-        if (mStopFormatting) {
+        if (mStopFormatting && !forceReformat) {
             // Restart the formatting when all texts were clear.
             mStopFormatting = !(s.length() == 0);
             return;

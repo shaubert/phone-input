@@ -2,17 +2,25 @@ package com.shaubert.ui.phone;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Handler;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.View;
+
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 public class PhoneInputDelegate {
 
@@ -25,8 +33,15 @@ public class PhoneInputDelegate {
     private PhoneNumberUtil.PhoneNumberFormat phoneNumberFormat = PhoneNumberUtil.PhoneNumberFormat.NATIONAL;
     private PhoneNumberUtil phoneNumberUtil;
     private MaskBuilder maskBuilder;
+    private boolean autoChangeCountry;
+    private boolean displayCountryCode;
+
+    private Handler handler = new Handler();
 
     private PhoneInputView phoneInput;
+
+    private Set<PhoneInputView.TextChangeListener> listeners = new CopyOnWriteArraySet<>();
+    private CountryChangedListener countryChangeListener;
 
     public PhoneInputDelegate(PhoneInputView phoneInput) {
         this.phoneInput = phoneInput;
@@ -54,6 +69,8 @@ public class PhoneInputDelegate {
             }
 
             countryFromAttrs = typedArray.getString(R.styleable.pi_PhoneInputStyle_countryIso);
+            autoChangeCountry = typedArray.getBoolean(R.styleable.pi_PhoneInputStyle_autoChangeCountry, false);
+            displayCountryCode = typedArray.getBoolean(R.styleable.pi_PhoneInputStyle_displayCountryCode, false);
             typedArray.recycle();
         }
 
@@ -126,11 +143,19 @@ public class PhoneInputDelegate {
     }
 
     public void setCountry(Country country) {
+        setCountry(country, false);
+    }
+
+    private void setCountry(Country country, boolean fromUser) {
         if (this.country == country || (this.country != null && this.country.equals(country))) {
             return;
         }
         this.country = country;
         refreshMask();
+
+        if (countryChangeListener != null) {
+            countryChangeListener.onCountryChanged(country, fromUser);
+        }
     }
 
     public Country getCountry() {
@@ -148,13 +173,57 @@ public class PhoneInputDelegate {
         }
     }
 
+    public void setAutoChangeCountry(boolean autoChangeCountry) {
+        this.autoChangeCountry = autoChangeCountry;
+    }
+
+    public void setDisplayCountryCode(boolean displayCountryCode) {
+        if (this.displayCountryCode != displayCountryCode) {
+            this.displayCountryCode = displayCountryCode;
+            refreshMask();
+        }
+    }
+
+    public boolean isDisplayCountryCode() {
+        return displayCountryCode
+                && (phoneNumberFormat == PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL
+                || phoneNumberFormat == PhoneNumberUtil.PhoneNumberFormat.E164);
+    }
+
     public void refreshMask() {
         phoneInput.setMask(getMaskFromCountry(country));
     }
 
-    private String getMaskFromCountry(Country country) {
+    @Nullable
+    public String getCountryCode(String text) {
+        Country country = getTopCountry(resolveCountries(text));
+        return country != null ? String.valueOf(country.getCountryCode()) : null;
+    }
+
+    public String replaceCountryCode(String text, String newCode) {
+        if (newCode == null) return text;
+
+        String oldNumber = PhoneNumberUtil.normalizeDigitsOnly(text);
+        Country country = getTopCountry(resolveCountries(text));
+        if (country != null) {
+            String newDigits = PhoneNumberUtil.normalizeDigitsOnly(newCode);
+            String oldDigits = PhoneNumberUtil.normalizeDigitsOnly(String.valueOf(country.getCountryCode()));
+            if (newDigits.equals(oldDigits)) {
+                return text;
+            }
+
+            return new StringBuilder(oldNumber)
+                    .replace(0, oldDigits.length(), newDigits)
+                    .insert(0, "+")
+                    .toString();
+        }
+
+        return newCode + oldNumber;
+    }
+
+    private Mask getMaskFromCountry(Country country) {
         if (maskBuilder == null) {
-            return null;
+            return Mask.EMPTY;
         } else {
             return maskBuilder.getMask(country, phoneNumberFormat);
         }
@@ -260,6 +329,82 @@ public class PhoneInputDelegate {
                 setCountry(country);
             }
         }
+    }
+
+    private void updateCountryIfNeeded(@NonNull String text) {
+        if (autoChangeCountry
+                && countries != null) {
+            Set<Country> resolvedCountries = resolveCountries(text);
+            if (!resolvedCountries.isEmpty()
+                    && !resolvedCountries.contains(country)) {
+                final Country topCountry = getTopCountry(resolvedCountries);
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        setCountry(topCountry, true);
+                    }
+                });
+            }
+        }
+    }
+
+    @Nullable
+    private Country getTopCountry(Set<Country> resolvedCountries) {
+        if (resolvedCountries.isEmpty()) return null;
+
+        return Phones.getTopCountryWithCode(
+                resolvedCountries.iterator().next().getCountryCode(),
+                countries);
+    }
+
+    private Set<Country> resolveCountries(@NonNull String text) {
+        Set<Country> result = new HashSet<>();
+        String trimmed = text.trim();
+        if (trimmed.startsWith("+")) {
+            String digits = PhoneNumberUtil.normalizeDigitsOnly(trimmed);
+            for (Country country : countries.getCountries()) {
+                if (digits.startsWith(String.valueOf(country.getCountryCode()))) {
+                    result.add(country);
+                }
+            }
+        }
+        return result;
+    }
+
+    public TextWatcher createTextWatcher() {
+        return new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                PhoneInputDelegate.this.onTextChanged(s.toString());
+            }
+        };
+    }
+
+    private void onTextChanged(@NonNull String text) {
+        updateCountryIfNeeded(text);
+        for (PhoneInputView.TextChangeListener listener : listeners) {
+            listener.onTextChanged(text);
+        }
+    }
+
+    public void addTextChangeListener(PhoneInputView.TextChangeListener listener) {
+        listeners.add(listener);
+    }
+
+    public void removeTextChangeListener(PhoneInputView.TextChangeListener listener) {
+        listeners.remove(listener);
+    }
+
+    public void setCountryChangeListener(CountryChangedListener countryChangeListener) {
+        this.countryChangeListener = countryChangeListener;
     }
 
     public static class SavedState extends View.BaseSavedState {
