@@ -77,15 +77,15 @@ public class Phones {
      * code: 262 = [Mayotte/YT], Réunion
      * code: 358 = [Finland/FI], Åland Islands
      * code: 7 = [Russia/RU], Kazakhstan
-     * code: 47 = Svalbard & Jan Mayen, [Norway/NO]
+     * code: 47 = Svalbard &amp; Jan Mayen, [Norway/NO]
      * code: 44 = [United Kingdom/GB], Jersey, Guernsey, Isle of Man
      * code: 212 = Western Sahara, [Morocco/MA]
      * code: 290 = Tristan da Cunha, [St. Helena/SH]
      * code: 1 = U.S. Virgin Islands, American Samoa, Guam, Bahamas,
-     * Antigua & Barbuda, St. Lucia, St. Kitts & Nevis, Montserrat,
+     * Antigua &amp; Barbuda, St. Lucia, St. Kitts &amp; Nevis, Montserrat,
      * Canada, [United States/US], Grenada, Northern Mariana Islands,
-     * Trinidad & Tobago, Anguilla, British Virgin Islands,
-     * Turks & Caicos Islands, Barbados, St. Vincent & Grenadines,
+     * Trinidad &amp; Tobago, Anguilla, British Virgin Islands,
+     * Turks &amp; Caicos Islands, Barbados, St. Vincent &amp; Grenadines,
      * Bermuda, Sint Maarten, Dominica, Jamaica, Puerto Rico, Cayman Islands
      * Dominican Republic
      * code: 599 = Curaçao, [Caribbean Netherlands/BQ]
