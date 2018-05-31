@@ -58,7 +58,7 @@ public class Country implements Comparable<Country> {
         if (isoCode == null) return null;
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            return "+" + countryCode;
+            return isoCode.toUpperCase(Locale.ENGLISH);
         }
 
         StringBuilder builder = new StringBuilder();
