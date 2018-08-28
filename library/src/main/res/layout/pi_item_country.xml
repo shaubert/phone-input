@@ -5,18 +5,19 @@
     android:minHeight="?android:attr/listPreferredItemHeightSmall"
     android:paddingTop="4dp"
     android:paddingBottom="4dp"
-    android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
-    android:paddingStart="?android:attr/listPreferredItemPaddingStart"
-    android:paddingRight="?android:attr/listPreferredItemPaddingRight"
-    android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
+    android:paddingLeft="20dp"
+    android:paddingStart="20dp"
+    android:paddingRight="20dp"
+    android:paddingEnd="20dp"
     android:gravity="center_vertical"
-    android:orientation="horizontal" >
+    android:orientation="horizontal"
+    android:background="?selectableItemBackground">
 
     <TextView
         android:id="@+id/icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="30dp"
+        android:textSize="16dp"
         android:includeFontPadding="false"
         android:textColor="?android:attr/textColorPrimary"/>
 
