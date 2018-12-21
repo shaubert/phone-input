@@ -24,6 +24,6 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile project(':masked-met')
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':masked-met')
 }

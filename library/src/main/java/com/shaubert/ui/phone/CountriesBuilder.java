@@ -50,6 +50,7 @@ class CountriesBuilder {
 
         List<Country> countries = new ArrayList<>(regionToCodeMap.size());
         for (Map.Entry<String, Integer> entry : regionToCodeMap.entrySet()) {
+            if (entry.getValue() == null) continue;
             countries.add(new Country(entry.getKey(), entry.getValue(), context));
         }
 
@@ -68,7 +69,7 @@ class CountriesBuilder {
         regionToCodeMap = new HashMap<>();
         for (Map.Entry<Integer, List<String>> entry : countryCodeToRegionCodeMap.entrySet()) {
             Integer code = entry.getKey();
-            if (globalNetworkCallingCodes.contains(code)) {
+            if (globalNetworkCallingCodes.contains(code) || code == null) {
                 continue;
             }
 

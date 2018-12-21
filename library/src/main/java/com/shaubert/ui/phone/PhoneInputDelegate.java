@@ -48,9 +48,14 @@ public class PhoneInputDelegate {
         maskBuilder = new DefaultMaskBuilder(phoneInput);
     }
 
-    public void init(AttributeSet attrs) {
+    public void init(AttributeSet attrs, int defStyleAttr) {
         if (attrs != null) {
-            TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.pi_PhoneInputStyle);
+            TypedArray typedArray = getContext().obtainStyledAttributes(
+                    attrs,
+                    R.styleable.pi_PhoneInputStyle,
+                    defStyleAttr,
+                    0
+            );
 
             int formatInt = typedArray.getInt(R.styleable.pi_PhoneInputStyle_phoneNumberFormat, -1);
             switch (formatInt) {

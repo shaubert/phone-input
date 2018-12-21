@@ -23,22 +23,22 @@ public class PhoneInputMaskedMETEditText extends MaskedMETEditText implements Ph
 
     public PhoneInputMaskedMETEditText(Context context) {
         super(context);
-        init(null);
+        init(null, 0);
     }
 
     public PhoneInputMaskedMETEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(attrs);
+        init(attrs, 0);
     }
 
     public PhoneInputMaskedMETEditText(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(attrs);
+        init(attrs, defStyleAttr);
     }
 
-    private void init(AttributeSet attrs) {
+    private void init(AttributeSet attrs, int defStyleAttr) {
         delegate = new PhoneInputDelegate(this);
-        delegate.init(attrs);
+        delegate.init(attrs, defStyleAttr);
         addTextChangedListener(delegate.createTextWatcher());
     }
 
