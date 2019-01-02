@@ -112,7 +112,9 @@ public class PhoneInputsSampleFragment extends Fragment {
     public void setSelectedCountry(Country selectedCountry) {
         this.selectedCountry = selectedCountry;
 
-        pickCountryButton.setText(selectedCountry.getUnicodeSymbol() + " " + selectedCountry.getDisplayName());
+        CountryPickerTextView.DefaultTextProvider provider =
+                new CountryPickerTextView.DefaultTextProvider();
+        pickCountryButton.setText(provider.getName(selectedCountry));
         for (PhoneInputView input : phoneInputs) {
             input.setCountry(selectedCountry);
         }

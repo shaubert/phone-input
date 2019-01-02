@@ -3,29 +3,34 @@ package com.shaubert.ui.phone;
 import android.content.Context;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.AppCompatTextView;
+import android.support.text.emoji.widget.EmojiAppCompatTextView;
 import android.util.AttributeSet;
 import android.view.View;
 
-public class CountryPickerTextView extends AppCompatTextView implements CountryPickerView {
+public class CountryPickerTextView extends EmojiAppCompatTextView implements CountryPickerView {
 
     private CountryPickerDelegate delegate;
     private CountryChangedListener countryChangedListener;
     private TextProvider textProvider = new DefaultTextProvider();
 
     public CountryPickerTextView(Context context) {
-        super(context);
+        super(prepare(context));
         init(null);
     }
 
     public CountryPickerTextView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        super(prepare(context), attrs);
         init(attrs);
     }
 
     public CountryPickerTextView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+        super(prepare(context), attrs, defStyleAttr);
         init(attrs);
+    }
+
+    private static Context prepare(Context context) {
+        Countries.init(context);
+        return context;
     }
 
     private void init(AttributeSet attrs) {

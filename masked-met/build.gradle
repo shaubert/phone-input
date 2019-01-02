@@ -2,15 +2,18 @@ apply plugin: 'com.android.library'
 
 dependencies {
     api project(':masked')
-    implementation 'com.shaubert.maskedinput:met-extension:1.2.9'
+
+    implementation('com.shaubert.maskedinput:met-extension:1.2.9') {
+        exclude group: 'com.android.support', module: "support-v4"
+        exclude group: 'com.android.support', module: "appcompat-v7"
+    }
 }
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '27.0.3'
 
     defaultConfig {
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 27
     }
 }

@@ -1,7 +1,6 @@
 package com.shaubert.ui.phone;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +11,6 @@ public class ItemCountryPresenter extends RecyclerView.ViewHolder {
     private TextView name;
 
     private Country data;
-    private float originalIconTextSize;
-    private float codeIconTextSize;
 
     public ItemCountryPresenter(LayoutInflater inflater, ViewGroup parent) {
         this(inflater.inflate(R.layout.pi_item_country, parent, false));
@@ -24,8 +21,11 @@ public class ItemCountryPresenter extends RecyclerView.ViewHolder {
         icon = view.findViewById(R.id.icon);
         name = view.findViewById(R.id.name);
 
-        originalIconTextSize = icon.getTextSize();
-        codeIconTextSize = name.getTextSize();
+        if (icon instanceof CountryPickerTextView) {
+            ((CountryPickerTextView) icon).setTextProvider(
+                    new CountryPickerTextView.OnlyIconTextProvider()
+            );
+        }
     }
 
     public Country getData() {
@@ -36,16 +36,11 @@ public class ItemCountryPresenter extends RecyclerView.ViewHolder {
         if (data != null) {
             itemView.setVisibility(View.VISIBLE);
 
-            String unicodeSymbol = data.getUnicodeSymbol();
-            if (unicodeSymbol.startsWith("+")) {
-                icon.setTextSize(TypedValue.COMPLEX_UNIT_PX, codeIconTextSize);
-                icon.setMinEms(2);
+            if (icon instanceof CountryPickerTextView) {
+                ((CountryPickerTextView) icon).setCountry(data);
             } else {
-                icon.setTextSize(TypedValue.COMPLEX_UNIT_PX, originalIconTextSize);
-                icon.setMinEms(0);
+                icon.setText(data.getUnicodeSymbol());
             }
-            icon.setText(unicodeSymbol);
-
             name.setText(data.getDisplayName());
         } else {
             itemView.setVisibility(View.GONE);

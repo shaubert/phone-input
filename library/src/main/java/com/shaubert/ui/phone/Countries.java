@@ -2,7 +2,10 @@ package com.shaubert.ui.phone;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Handler;
+import android.os.AsyncTask;
+import android.support.text.emoji.EmojiCompat;
+import android.support.text.emoji.FontRequestEmojiCompatConfig;
+import android.support.v4.provider.FontRequest;
 import android.text.TextUtils;
 
 import java.util.Collections;
@@ -18,34 +21,57 @@ public class Countries {
     @SuppressLint("StaticFieldLeak")
     private static Countries instance;
 
+    public static void init(Context context) {
+        get(context, new Callback() {
+            @Override
+            public void onLoaded(Countries loadedCountries) {
+                //do nothing
+            }
+        });
+    }
+
     public static void get(final Context context, final Callback callback) {
         if (instance != null) {
             callback.onLoaded(instance);
             return;
         }
 
-        final Handler handler = new Handler();
-        new Thread(new Runnable() {
+        loadEmojiFont(context);
+
+        new AsyncTask<Void, Void, Countries>() {
             @Override
-            public void run() {
-                get(context);
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        callback.onLoaded(instance);
-                    }
-                });
+            protected Countries doInBackground(Void... voids) {
+                return Countries.get(context);
             }
-        }).start();
+
+            @Override
+            protected void onPostExecute(Countries countries) {
+                callback.onLoaded(countries);
+            }
+        }.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
     }
 
     public static synchronized Countries get(Context context) {
         if (instance == null) {
             List<Country> countries = CountriesBuilder.createCountriesList(context, true);
             instance = new Countries(countries);
+
+            loadEmojiFont(context);
         }
 
         return instance;
+    }
+
+    private static void loadEmojiFont(Context context) {
+        final FontRequest fontRequest = new FontRequest(
+                "com.google.android.gms.fonts",
+                "com.google.android.gms",
+                "Noto Color Emoji Compat",
+                R.array.com_google_android_gms_fonts_certs);
+        EmojiCompat.init(
+                new FontRequestEmojiCompatConfig(context, fontRequest)
+                        .setReplaceAll(true)
+        );
     }
 
     private Countries(List<Country> countries) {

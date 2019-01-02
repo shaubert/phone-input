@@ -38,7 +38,7 @@ public class Country implements Comparable<Country> {
 
     public String getUnicodeSymbol() {
         if (unicodeSymbol == null) {
-            unicodeSymbol = asUnicodeFlag(isoCode, getCountryCode());
+            unicodeSymbol = asUnicodeFlag(isoCode);
         }
         return unicodeSymbol;
     }
@@ -54,12 +54,8 @@ public class Country implements Comparable<Country> {
         return CountriesBuilder.getCountyCode(isoCode);
     }
 
-    private static String asUnicodeFlag(String isoCode, int countryCode) {
+    private static String asUnicodeFlag(String isoCode) {
         if (isoCode == null) return null;
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            return isoCode.toUpperCase(Locale.ENGLISH);
-        }
 
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < isoCode.length(); i++) {

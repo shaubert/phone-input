@@ -21,7 +21,7 @@
                 android:layout_height="wrap_content"
                 android:text="Set Random Phone" />
 
-            <Button
+            <android.support.text.emoji.widget.EmojiAppCompatButton
                 android:id="@+id/pick_country"
                 android:layout_width="260dp"
                 android:layout_height="wrap_content"
