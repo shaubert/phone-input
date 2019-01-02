@@ -14,23 +14,18 @@ public class CountryPickerTextView extends EmojiAppCompatTextView implements Cou
     private TextProvider textProvider = new DefaultTextProvider();
 
     public CountryPickerTextView(Context context) {
-        super(prepare(context));
+        super(context);
         init(null);
     }
 
     public CountryPickerTextView(Context context, AttributeSet attrs) {
-        super(prepare(context), attrs);
+        super(context, attrs);
         init(attrs);
     }
 
     public CountryPickerTextView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(prepare(context), attrs, defStyleAttr);
+        super(context, attrs, defStyleAttr);
         init(attrs);
-    }
-
-    private static Context prepare(Context context) {
-        Countries.init(context);
-        return context;
     }
 
     private void init(AttributeSet attrs) {
