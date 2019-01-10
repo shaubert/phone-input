@@ -25,12 +25,8 @@ public class CountryListAdapter extends RecyclerView.Adapter<ItemCountryPresente
 
     public void setCountries(Countries countries) {
         this.countries = countries;
-        countriesList.clear();
-        if (countries != null) {
-            countriesList.addAll(countries.getCountries());
-            Collections.sort(countriesList);
-        }
 
+        filterCountries();
         notifyDataSetChanged();
     }
 
@@ -65,6 +61,7 @@ public class CountryListAdapter extends RecyclerView.Adapter<ItemCountryPresente
                     countriesList.add(country);
                 }
             }
+            Collections.sort(countriesList);
         }
     }
 
