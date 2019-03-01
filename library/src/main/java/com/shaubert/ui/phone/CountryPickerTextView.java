@@ -2,8 +2,8 @@ package com.shaubert.ui.phone;
 
 import android.content.Context;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
-import android.support.text.emoji.widget.EmojiAppCompatTextView;
+import androidx.annotation.Nullable;
+import androidx.emoji.widget.EmojiAppCompatTextView;
 import android.util.AttributeSet;
 import android.view.View;
 

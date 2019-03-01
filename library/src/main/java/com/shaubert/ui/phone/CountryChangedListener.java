@@ -1,6 +1,6 @@
 package com.shaubert.ui.phone;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 public interface CountryChangedListener {
     void onCountryChanged(@Nullable Country country, boolean fromUser);

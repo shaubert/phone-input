@@ -1,21 +1,21 @@
 apply plugin: 'com.android.library'
 
 dependencies {
-    implementation "com.android.support:support-v4:27.1.1"
-    implementation "com.android.support:recyclerview-v7:27.1.1"
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation "com.android.support:support-emoji:27.1.1"
-    api "com.android.support:support-emoji-appcompat:27.1.1"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.emoji:emoji:1.0.0'
+    api 'androidx.emoji:emoji-appcompat:1.0.0'
 
-    api 'com.googlecode.libphonenumber:libphonenumber:8.10.2'
+    api 'com.googlecode.libphonenumber:libphonenumber:8.10.6'
 }
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 27
+        targetSdkVersion 28
     }
 }
 
