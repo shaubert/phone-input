@@ -16,6 +16,8 @@ public interface PhoneInputView {
 
     void setMask(Mask mask);
 
+    void setCustomCountries(@Nullable Countries countries);
+
     Country getDefaultCountry();
 
     void setCountryIso(String countryIso);

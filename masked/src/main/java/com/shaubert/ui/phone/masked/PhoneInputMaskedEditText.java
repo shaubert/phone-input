@@ -2,13 +2,21 @@ package com.shaubert.ui.phone.masked;
 
 import android.content.Context;
 import android.os.Parcelable;
-import androidx.annotation.Nullable;
 import android.util.AttributeSet;
+
+import androidx.annotation.Nullable;
+
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 import com.shaubert.maskedinput.MaskChar;
 import com.shaubert.maskedinput.MaskedEditText;
-import com.shaubert.ui.phone.*;
+import com.shaubert.ui.phone.Countries;
+import com.shaubert.ui.phone.Country;
+import com.shaubert.ui.phone.CountryChangedListener;
+import com.shaubert.ui.phone.Mask;
+import com.shaubert.ui.phone.MaskBuilder;
+import com.shaubert.ui.phone.PhoneInputDelegate;
+import com.shaubert.ui.phone.PhoneInputView;
 
 public class PhoneInputMaskedEditText extends MaskedEditText implements PhoneInputView {
 
@@ -33,6 +41,11 @@ public class PhoneInputMaskedEditText extends MaskedEditText implements PhoneInp
         delegate = new PhoneInputDelegate(this);
         delegate.init(attrs, defStyleAttr);
         addTextChangedListener(delegate.createTextWatcher());
+    }
+
+    @Override
+    public void setCustomCountries(@Nullable Countries countries) {
+        delegate.setCustomCountries(countries);
     }
 
     @Override

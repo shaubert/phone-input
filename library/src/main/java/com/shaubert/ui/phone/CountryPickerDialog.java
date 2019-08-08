@@ -3,15 +3,16 @@ package com.shaubert.ui.phone;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatDialog;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.SearchView;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDialog;
+import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by GODARD Tuatini on 07/05/15.
@@ -41,6 +42,7 @@ public class CountryPickerDialog extends AppCompatDialog {
 
     /**
      * You can set the scrollToCountryIsoCode to scroll to your favorite country
+     *
      * @param context
      * @param callbacks
      * @param scrollToCountryIsoCode
@@ -53,16 +55,32 @@ public class CountryPickerDialog extends AppCompatDialog {
 
         this.callbacks = callbacks;
         this.scrollToCountryIsoCode = scrollToCountryIsoCode;
+        loadCountries();
+    }
 
+    private void loadCountries() {
         Countries.get(getContext(), new Countries.Callback() {
             @Override
             public void onLoaded(Countries loadedCountries) {
-                countries = loadedCountries;
-                if (adapter != null) {
-                    adapter.setCountries(countries);
+                if (countries == null) {
+                    setCountries(loadedCountries);
                 }
             }
         });
+    }
+
+    public void setCustomCountries(Countries countries) {
+        setCountries(countries);
+        if (countries == null) {
+            loadCountries();
+        }
+    }
+
+    private void setCountries(Countries countries) {
+        this.countries = countries;
+        if (adapter != null) {
+            adapter.setCountries(countries);
+        }
     }
 
     public void setCountriesFilter(CountriesFilter countriesFilter) {

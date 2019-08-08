@@ -2,8 +2,10 @@ package com.shaubert.ui.phone;
 
 import android.content.Context;
 import android.os.Parcelable;
-import androidx.appcompat.widget.AppCompatEditText;
 import android.util.AttributeSet;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatEditText;
 
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
@@ -32,6 +34,11 @@ public class PhoneInputEditText extends AppCompatEditText implements PhoneInputV
         delegate = new PhoneInputDelegate(this);
         delegate.init(attrs, defStyleAttr);
         addTextChangedListener(delegate.createTextWatcher());
+    }
+
+    @Override
+    public void setCustomCountries(@Nullable Countries countries) {
+        delegate.setCustomCountries(countries);
     }
 
     @Override

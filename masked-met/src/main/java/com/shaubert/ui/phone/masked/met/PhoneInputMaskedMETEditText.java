@@ -2,13 +2,15 @@ package com.shaubert.ui.phone.masked.met;
 
 import android.content.Context;
 import android.os.Parcelable;
-import androidx.annotation.Nullable;
 import android.util.AttributeSet;
+
+import androidx.annotation.Nullable;
 
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 import com.shaubert.maskedinput.MaskChar;
 import com.shaubert.maskedinput.metextension.MaskedMETEditText;
+import com.shaubert.ui.phone.Countries;
 import com.shaubert.ui.phone.Country;
 import com.shaubert.ui.phone.CountryChangedListener;
 import com.shaubert.ui.phone.Mask;
@@ -40,6 +42,11 @@ public class PhoneInputMaskedMETEditText extends MaskedMETEditText implements Ph
         delegate = new PhoneInputDelegate(this);
         delegate.init(attrs, defStyleAttr);
         addTextChangedListener(delegate.createTextWatcher());
+    }
+
+    @Override
+    public void setCustomCountries(@Nullable Countries countries) {
+        delegate.setCustomCountries(countries);
     }
 
     @Override

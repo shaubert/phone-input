@@ -38,7 +38,7 @@
                     android:layout_marginLeft="8dp"
                     android:layout_marginStart="8dp"
                     android:layout_weight="1"
-                    app:phoneNumberFormat="international" />
+                    app:pi_phoneNumberFormat="international" />
 
             </com.shaubert.ui.phone.PhoneInputLayout>
 
@@ -64,11 +64,43 @@
                     android:layout_marginLeft="8dp"
                     android:layout_marginStart="8dp"
                     android:layout_weight="1"
-                    app:phoneNumberFormat="international"
-                    app:autoChangeCountry="true"
-                    app:displayCountryCode="true" />
+                    app:pi_phoneNumberFormat="international"
+                    app:pi_autoChangeCountry="true"
+                    app:pi_displayCountryCode="true" />
 
             </com.shaubert.ui.phone.PhoneInputLayout>
+
+            <com.shaubert.ui.phone.PhoneInputLayout
+                android:id="@+id/phone_input_layout3"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                app:pi_customCountries="true">
+
+                <com.shaubert.ui.phone.CountryPickerTextView
+                    android:id="@+id/country_textview3"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textSize="24dp"
+                    app:pi_customCountries="true" />
+
+                <com.shaubert.ui.phone.PhoneInputEditText
+                    android:id="@+id/input_layout_edittext3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_weight="1"
+                    app:pi_autoChangeCountry="true"
+                    app:pi_customCountries="true"
+                    app:pi_displayCountryCode="true"
+                    app:pi_phoneNumberFormat="international" />
+
+            </com.shaubert.ui.phone.PhoneInputLayout>
+
 
             <Button
                 android:id="@+id/validate"

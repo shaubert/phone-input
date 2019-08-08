@@ -10,7 +10,7 @@ class CountriesBuilder {
 
     private static Map<String, Integer> regionToCodeMap;
 
-    static int getCountyCode(String countryIso) {
+    static Integer getCountyCode(String countryIso) {
         Map<String, Integer> codesWithReflection = getCountryCodesWithProxy();
         if (codesWithReflection != null) {
             return codesWithReflection.get(countryIso);

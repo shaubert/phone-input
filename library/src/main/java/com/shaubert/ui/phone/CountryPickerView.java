@@ -14,6 +14,8 @@ public interface CountryPickerView {
 
     void setCountriesFilter(CountriesFilter countriesFilter);
 
+    void setCustomCountries(Countries countries);
+
     void setHideKeyboardOnDismiss(boolean hideKeyboardOnDismiss);
 
 }

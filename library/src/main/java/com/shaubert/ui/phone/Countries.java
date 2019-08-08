@@ -46,7 +46,7 @@ public class Countries {
         return instance;
     }
 
-    private Countries(List<Country> countries) {
+    public Countries(List<Country> countries) {
         this.countries = Collections.unmodifiableList(countries);
 
         for (Country country : countries) {

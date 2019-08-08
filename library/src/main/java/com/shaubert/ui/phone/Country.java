@@ -2,8 +2,10 @@ package com.shaubert.ui.phone;
 
 import android.content.Context;
 import android.os.Build;
-import androidx.annotation.NonNull;
 import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -14,22 +16,41 @@ public class Country implements Comparable<Country> {
     private static String language;
 
     private final String isoCode;
+    @Nullable
     private final Context appContext;
 
+    private String displayName;
     private String unicodeSymbol;
     private int countryCode;
     private boolean hasCountryCode;
 
-    public Country(String isoCode, Context context) {
+    public Country(String isoCode, @NonNull Context context) {
         this.isoCode = isoCode;
         this.appContext = context;
     }
 
-    public Country(String isoCode, int countryCode, Context context) {
+    public Country(String isoCode, int countryCode, @NonNull Context context) {
         this.isoCode = isoCode;
         this.countryCode = countryCode;
         this.appContext = context;
         hasCountryCode = true;
+    }
+
+    public Country(String isoCode, String displayName, String unicodeSymbol) {
+        this(isoCode, displayName, unicodeSymbol, 0, false);
+    }
+
+    public Country(String isoCode, String displayName, String unicodeSymbol, int countryCode) {
+        this(isoCode, displayName, unicodeSymbol, countryCode, true);
+    }
+
+    private Country(String isoCode, String displayName, String unicodeSymbol, int countryCode, boolean hasCountryCode) {
+        this.isoCode = isoCode;
+        this.appContext = null;
+        this.displayName = displayName;
+        this.unicodeSymbol = unicodeSymbol;
+        this.countryCode = countryCode;
+        this.hasCountryCode = hasCountryCode;
     }
 
     public String getIsoCode() {
@@ -51,7 +72,8 @@ public class Country implements Comparable<Country> {
     }
 
     private int resolveCountryCode() {
-        return CountriesBuilder.getCountyCode(isoCode);
+        Integer code = CountriesBuilder.getCountyCode(isoCode);
+        return code != null ? code : 0;
     }
 
     private static String asUnicodeFlag(String isoCode) {
@@ -65,6 +87,10 @@ public class Country implements Comparable<Country> {
     }
 
     public String getDisplayName() {
+        if (displayName != null || appContext == null) {
+            return displayName;
+        }
+
         synchronized (DISPLAY_COUNTRY_NAMES_CACHE) {
             String newLanguage = null;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

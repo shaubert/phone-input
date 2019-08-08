@@ -3,12 +3,15 @@ package com.shaubert.ui.phone;
 import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.res.TypedArray;
 import android.os.Parcel;
 import android.os.Parcelable;
-import androidx.fragment.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
 
 import java.util.UUID;
 
@@ -17,7 +20,10 @@ public class CountryPickerDelegate implements CountryPickerView {
     private FragmentActivity activity;
     private String tag = UUID.randomUUID().toString();
     private Country country;
+
+    @Nullable
     private Countries countries;
+    private boolean customCountries;
 
     private CountryPickerDialogManager countryPickerDialogManager;
     private CountryChangedListener countryChangedListener;
@@ -26,23 +32,43 @@ public class CountryPickerDelegate implements CountryPickerView {
     private CountryPickerView view;
     private String restoredCountryIso;
 
-    public CountryPickerDelegate(CountryPickerView view, AttributeSet attrs) {
+    public CountryPickerDelegate(CountryPickerView view, AttributeSet attrs, int defStyleAttr) {
         this.view = view;
-        init(attrs);
+        init(attrs, defStyleAttr);
     }
 
-    private void init(AttributeSet attrs) {
+    private void init(AttributeSet attrs, int defStyleAttr) {
         Activity activity = getActivity(getContext());
         if (!(activity instanceof FragmentActivity)) {
             throw new IllegalArgumentException("must be created with FragmentActivity");
         }
         this.activity = (FragmentActivity) activity;
 
+        if (attrs != null) {
+            TypedArray typedArray = getContext().obtainStyledAttributes(
+                    attrs,
+                    R.styleable.pi_CountryPickerStyle,
+                    defStyleAttr,
+                    0
+            );
+
+            customCountries = typedArray.getBoolean(R.styleable.pi_CountryPickerStyle_pi_customCountries, false);
+            typedArray.recycle();
+        }
+
+        if (!customCountries) {
+            loadCountries();
+        }
+    }
+
+    private void loadCountries() {
         Countries.get(getContext(), new Countries.Callback() {
             @Override
             public void onLoaded(Countries loadedCountries) {
-                countries = loadedCountries;
-                onCountriesLoaded();
+                if (!customCountries) {
+                    countries = loadedCountries;
+                    onCountriesLoaded();
+                }
             }
         });
     }
@@ -75,13 +101,6 @@ public class CountryPickerDelegate implements CountryPickerView {
                 }
             });
         }
-    }
-
-    public Countries getCountries() {
-        if (countries == null) {
-            countries = Countries.get(getContext());
-        }
-        return countries;
     }
 
     @Override
@@ -132,6 +151,30 @@ public class CountryPickerDelegate implements CountryPickerView {
     }
 
     @Override
+    public void setCustomCountries(@Nullable Countries countries) {
+        if (!customCountries && countries == null) {
+            return;
+        }
+
+        this.countries = countries;
+        if (countries == null
+                || !countries.getCountries().contains(country)) {
+            setCountry(null);
+        }
+
+        if (countries != null) {
+            this.customCountries = true;
+            onCountriesLoaded();
+        } else {
+            this.customCountries = false;
+            loadCountries();
+        }
+
+        setupDialogManager();
+        countryPickerDialogManager.setCustomCountries(countries);
+    }
+
+    @Override
     public void setHideKeyboardOnDismiss(boolean hideKeyboardOnDismiss) {
         setupDialogManager();
         countryPickerDialogManager.setHideKeyboardOnDismiss(hideKeyboardOnDismiss);
@@ -152,6 +195,8 @@ public class CountryPickerDelegate implements CountryPickerView {
     }
 
     private void onCountriesLoaded() {
+        if (countries == null) return;
+
         if (!TextUtils.isEmpty(restoredCountryIso)) {
             Country country = countries.getCountryByIso(restoredCountryIso);
             restoredCountryIso = null;
@@ -170,6 +215,10 @@ public class CountryPickerDelegate implements CountryPickerView {
                 setCountry(country);
                 break;
             }
+        }
+
+        if (this.country == null && !countries.getCountries().isEmpty()) {
+            setCountry(countries.getCountries().get(0));
         }
     }
 

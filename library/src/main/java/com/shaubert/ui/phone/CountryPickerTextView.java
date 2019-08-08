@@ -2,10 +2,11 @@ package com.shaubert.ui.phone;
 
 import android.content.Context;
 import android.os.Parcelable;
-import androidx.annotation.Nullable;
-import androidx.emoji.widget.EmojiAppCompatTextView;
 import android.util.AttributeSet;
 import android.view.View;
+
+import androidx.annotation.Nullable;
+import androidx.emoji.widget.EmojiAppCompatTextView;
 
 public class CountryPickerTextView extends EmojiAppCompatTextView implements CountryPickerView {
 
@@ -15,21 +16,21 @@ public class CountryPickerTextView extends EmojiAppCompatTextView implements Cou
 
     public CountryPickerTextView(Context context) {
         super(context);
-        init(null);
+        init(null, 0);
     }
 
     public CountryPickerTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(attrs);
+        init(attrs, 0);
     }
 
     public CountryPickerTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(attrs);
+        init(attrs, defStyleAttr);
     }
 
-    private void init(AttributeSet attrs) {
-        delegate = new CountryPickerDelegate(this, attrs);
+    private void init(AttributeSet attrs, int defStyleAttr) {
+        delegate = new CountryPickerDelegate(this, attrs, defStyleAttr);
         delegate.setCountryChangedListener(new CountryChangedListener() {
             @Override
             public void onCountryChanged(@Nullable Country country, boolean fromUser) {
@@ -91,6 +92,11 @@ public class CountryPickerTextView extends EmojiAppCompatTextView implements Cou
     @Override
     public void setCountriesFilter(CountriesFilter countriesFilter) {
         delegate.setCountriesFilter(countriesFilter);
+    }
+
+    @Override
+    public void setCustomCountries(Countries countries) {
+        delegate.setCustomCountries(countries);
     }
 
     @Override
