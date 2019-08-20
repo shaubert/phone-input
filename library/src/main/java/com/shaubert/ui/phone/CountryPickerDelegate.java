@@ -13,6 +13,7 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 
+import java.util.Collections;
 import java.util.UUID;
 
 public class CountryPickerDelegate implements CountryPickerView {
@@ -86,6 +87,13 @@ public class CountryPickerDelegate implements CountryPickerView {
 
     public void openPicker() {
         setupDialogManager();
+        if (customCountries) {
+            countryPickerDialogManager.setCustomCountries(
+                    countries != null ? countries : new Countries(Collections.<Country>emptyList())
+            );
+        } else {
+            countryPickerDialogManager.setCustomCountries(null);
+        }
         countryPickerDialogManager.setScrollToCountryIsoCode(country != null ? country.getIsoCode() : null);
         countryPickerDialogManager.show();
     }
