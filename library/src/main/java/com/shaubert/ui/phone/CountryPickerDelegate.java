@@ -195,6 +195,9 @@ public class CountryPickerDelegate implements CountryPickerView {
         }
 
         restoredCountryIso = ss.countryIso;
+        if (restoredCountryIso == null) {
+            restoredCountryIso = ""; //to set country to null
+        }
         if (countries != null) {
             onCountriesLoaded();
         }
@@ -205,13 +208,11 @@ public class CountryPickerDelegate implements CountryPickerView {
     private void onCountriesLoaded() {
         if (countries == null) return;
 
-        if (!TextUtils.isEmpty(restoredCountryIso)) {
+        if (restoredCountryIso != null) {
             Country country = countries.getCountryByIso(restoredCountryIso);
             restoredCountryIso = null;
-            if (country != null) {
-                setCountry(country);
-                return;
-            }
+            setCountry(country);
+            return;
         }
 
         if (this.country != null) return;

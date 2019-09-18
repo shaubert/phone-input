@@ -151,12 +151,10 @@ public class PhoneInputDelegate {
     }
 
     private void processRestoredCountry() {
-        if (!TextUtils.isEmpty(restoredCountry) && countries != null) {
+        if (restoredCountry != null && countries != null) {
             Country country = countries.getCountryByIso(restoredCountry);
             restoredCountry = null;
-            if (country != null) {
-                setCountry(country);
-            }
+            setCountry(country);
         }
     }
 
@@ -304,11 +302,13 @@ public class PhoneInputDelegate {
 
     public void dispatchOnRestoreInstanceState(Parcelable state) {
         SavedState ss = (SavedState) state;
-        if (!TextUtils.isEmpty(ss.countryIso)) {
-            restoredCountry = ss.countryIso;
-            if (countries != null) {
-                processRestoredCountry();
-            }
+        restoredCountry = ss.countryIso;
+        if (restoredCountry == null) {
+            restoredCountry = ""; //to restore null country
+        }
+
+        if (countries != null) {
+            processRestoredCountry();
         }
     }
 
