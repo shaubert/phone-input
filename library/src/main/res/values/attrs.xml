@@ -8,6 +8,7 @@
         <attr name="pi_autoChangeCountry" format="boolean|reference"/>
         <attr name="pi_displayCountryCode" format="boolean|reference"/>
         <attr name="pi_customCountries"/>
+        <attr name="pi_autoSetDefaultCountry"/>
         <attr name="pi_phoneNumberFormat" format="enum">
             <enum name="e164" value="0"/>
             <enum name="international" value="1"/>
@@ -18,10 +19,12 @@
 
     <declare-styleable name="pi_CountryPickerStyle">
         <attr name="pi_customCountries"/>
+        <attr name="pi_autoSetDefaultCountry"/>
     </declare-styleable>
 
     <declare-styleable name="pi_PhoneInputLayoutStyle">
         <attr name="pi_customCountries"/>
+        <attr name="pi_autoSetDefaultCountry"/>
     </declare-styleable>
 
 </resources>

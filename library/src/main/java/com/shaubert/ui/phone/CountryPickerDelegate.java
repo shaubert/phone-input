@@ -25,6 +25,7 @@ public class CountryPickerDelegate implements CountryPickerView {
     @Nullable
     private Countries countries;
     private boolean customCountries;
+    private boolean autoSetDefaultCountry = true;
 
     private CountryPickerDialogManager countryPickerDialogManager;
     private CountryChangedListener countryChangedListener;
@@ -54,6 +55,7 @@ public class CountryPickerDelegate implements CountryPickerView {
             );
 
             customCountries = typedArray.getBoolean(R.styleable.pi_CountryPickerStyle_pi_customCountries, false);
+            autoSetDefaultCountry = typedArray.getBoolean(R.styleable.pi_CountryPickerStyle_pi_autoSetDefaultCountry, autoSetDefaultCountry);
             typedArray.recycle();
         }
 
@@ -158,6 +160,10 @@ public class CountryPickerDelegate implements CountryPickerView {
         setCountry(country);
     }
 
+    public void setAutoSetDefaultCountry(boolean autoSetDefaultCountry) {
+        this.autoSetDefaultCountry = autoSetDefaultCountry;
+    }
+
     @Override
     public void setCustomCountries(@Nullable Countries countries) {
         if (!customCountries && countries == null) {
@@ -215,7 +221,7 @@ public class CountryPickerDelegate implements CountryPickerView {
             return;
         }
 
-        if (this.country != null) return;
+        if (this.country != null || !autoSetDefaultCountry) return;
 
         String[] possibleRegions = Phones.getPossibleRegions(getContext());
         for (String region : possibleRegions) {

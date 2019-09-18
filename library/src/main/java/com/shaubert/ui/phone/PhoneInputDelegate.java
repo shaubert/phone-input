@@ -29,6 +29,7 @@ public class PhoneInputDelegate {
     @Nullable
     private Countries countries;
     private boolean customCountries;
+    private boolean autoSetDefaultCountry = true;
 
     private String countryFromAttrs;
     private String restoredCountry;
@@ -82,6 +83,7 @@ public class PhoneInputDelegate {
             autoChangeCountry = typedArray.getBoolean(R.styleable.pi_PhoneInputStyle_pi_autoChangeCountry, false);
             displayCountryCode = typedArray.getBoolean(R.styleable.pi_PhoneInputStyle_pi_displayCountryCode, false);
             customCountries = typedArray.getBoolean(R.styleable.pi_PhoneInputStyle_pi_customCountries, false);
+            autoSetDefaultCountry = typedArray.getBoolean(R.styleable.pi_PhoneInputStyle_pi_autoSetDefaultCountry, autoSetDefaultCountry);
             typedArray.recycle();
         }
 
@@ -127,6 +129,10 @@ public class PhoneInputDelegate {
         }
     }
 
+    public void setAutoSetDefaultCountry(boolean autoSetDefaultCountry) {
+        this.autoSetDefaultCountry = autoSetDefaultCountry;
+    }
+
     private void onCountriesLoaded() {
         if (countries == null) return;
 
@@ -145,7 +151,7 @@ public class PhoneInputDelegate {
             setCountry(country);
         }
 
-        if (this.country == null) {
+        if (this.country == null && autoSetDefaultCountry) {
             setCountry(defaultCountry);
         }
     }

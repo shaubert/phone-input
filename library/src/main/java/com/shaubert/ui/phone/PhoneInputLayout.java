@@ -23,6 +23,7 @@ public class PhoneInputLayout extends LinearLayout {
     @Nullable
     private Countries countries;
     private boolean customCountries;
+    private boolean autoSetDefaultCountry = true;
 
     private boolean innerCountryChange;
 
@@ -57,6 +58,7 @@ public class PhoneInputLayout extends LinearLayout {
             );
 
             customCountries = typedArray.getBoolean(R.styleable.pi_PhoneInputLayoutStyle_pi_customCountries, false);
+            autoSetDefaultCountry = typedArray.getBoolean(R.styleable.pi_PhoneInputLayoutStyle_pi_autoSetDefaultCountry, autoSetDefaultCountry);
             typedArray.recycle();
         }
 
@@ -99,8 +101,12 @@ public class PhoneInputLayout extends LinearLayout {
         });
     }
 
+    public void setAutoSetDefaultCountry(boolean autoSetDefaultCountry) {
+        this.autoSetDefaultCountry = autoSetDefaultCountry;
+    }
+
     private void setupPossibleRegion() {
-        if (country != null || countries == null) {
+        if (country != null || countries == null || !autoSetDefaultCountry) {
             return;
         }
 
