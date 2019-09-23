@@ -67,6 +67,7 @@ public class Country implements Comparable<Country> {
     public synchronized int getCountryCode() {
         if (!hasCountryCode) {
             countryCode = resolveCountryCode();
+            hasCountryCode = true;
         }
         return countryCode;
     }
@@ -121,15 +122,14 @@ public class Country implements Comparable<Country> {
 
         Country country = (Country) o;
 
-        if (countryCode != country.countryCode) return false;
+        if (getCountryCode() != country.getCountryCode()) return false;
         return isoCode.equals(country.isoCode);
-
     }
 
     @Override
     public int hashCode() {
         int result = isoCode.hashCode();
-        result = 31 * result + countryCode;
+        result = 31 * result + getCountryCode();
         return result;
     }
 
