@@ -7,15 +7,15 @@ dependencies {
     implementation 'androidx.emoji:emoji:1.0.0'
     api 'androidx.emoji:emoji-appcompat:1.0.0'
 
-    api 'com.googlecode.libphonenumber:libphonenumber:8.10.6'
+    api 'com.googlecode.libphonenumber:libphonenumber:8.10.13'
 }
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 28
+        targetSdkVersion 29
     }
 }
 

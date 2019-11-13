@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.Nullable;
@@ -99,7 +100,12 @@ public class CountryPickerDialog extends AppCompatDialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pi_country_picker);
 
-        recyclerView = (RecyclerView) findViewById(R.id.pi_country_picker_list);
+        Window window = getWindow();
+        if (window != null) {
+            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        }
+
+        recyclerView = findViewById(R.id.pi_country_picker_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         adapter = new CountryListAdapter();
