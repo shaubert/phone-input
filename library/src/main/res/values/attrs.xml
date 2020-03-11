@@ -2,6 +2,7 @@
 <resources>
 
     <attr name="pi_customCountries" format="boolean|reference"/>
+    <attr name="pi_autoSetDefaultCountry" format="boolean"/>
 
     <declare-styleable name="pi_PhoneInputStyle">
         <attr name="pi_countryIso" format="string|reference"/>
