@@ -1,9 +1,10 @@
 package com.shaubert.ui.phone;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
+
+import androidx.annotation.Nullable;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -17,8 +18,9 @@ public class Countries {
 
     @SuppressLint("StaticFieldLeak")
     private static Countries instance;
+    private static CurrentLocaleProvider currentLocaleProvider = null;
 
-    public static void get(final Context context, final Callback callback) {
+    public static void get(final Callback callback) {
         if (instance != null) {
             callback.onLoaded(instance);
             return;
@@ -27,7 +29,7 @@ public class Countries {
         new AsyncTask<Void, Void, Countries>() {
             @Override
             protected Countries doInBackground(Void... voids) {
-                return Countries.get(context);
+                return Countries.get();
             }
 
             @Override
@@ -37,9 +39,18 @@ public class Countries {
         }.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
     }
 
-    public static synchronized Countries get(Context context) {
+    public static synchronized void setCurrentLocaleProvider(CurrentLocaleProvider provider) {
+        currentLocaleProvider = provider;
+    }
+
+    @Nullable
+    public static synchronized CurrentLocaleProvider getCurrentLocaleProvider() {
+        return currentLocaleProvider;
+    }
+
+    public static synchronized Countries get() {
         if (instance == null) {
-            List<Country> countries = CountriesBuilder.createCountriesList(context, true);
+            List<Country> countries = CountriesBuilder.createCountriesList(true);
             instance = new Countries(countries);
         }
 
@@ -74,6 +85,10 @@ public class Countries {
 
     public interface Callback {
         void onLoaded(Countries loadedCountries);
+    }
+
+    public interface CurrentLocaleProvider {
+        Locale getCurrentLocale();
     }
 
 }

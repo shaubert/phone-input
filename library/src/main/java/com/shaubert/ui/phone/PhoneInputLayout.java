@@ -90,7 +90,7 @@ public class PhoneInputLayout extends LinearLayout {
     }
 
     private void loadCountries() {
-        Countries.get(getContext(), new Countries.Callback() {
+        Countries.get(new Countries.Callback() {
             @Override
             public void onLoaded(Countries loadedCountries) {
                 if (!customCountries) {
@@ -223,7 +223,7 @@ public class PhoneInputLayout extends LinearLayout {
 
     public void setPhoneNumber(Phonenumber.PhoneNumber phoneNumber) {
         if (phoneNumber != null) {
-            Country country = Phones.getCountyFromPhone(phoneNumber, getContext());
+            Country country = Phones.getCountyFromPhone(phoneNumber);
             if (country != null) {
                 setCountry(country);
             }

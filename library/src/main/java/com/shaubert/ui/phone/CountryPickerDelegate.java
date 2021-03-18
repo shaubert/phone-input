@@ -65,7 +65,7 @@ public class CountryPickerDelegate implements CountryPickerView {
     }
 
     private void loadCountries() {
-        Countries.get(getContext(), new Countries.Callback() {
+        Countries.get(new Countries.Callback() {
             @Override
             public void onLoaded(Countries loadedCountries) {
                 if (!customCountries) {

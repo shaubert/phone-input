@@ -90,7 +90,7 @@ public class PhoneInputLayoutSampleFragment extends Fragment {
     }
 
     private void setRandomPhone() {
-        Phonenumber.PhoneNumber phoneNumber = Util.getRandomPhone(Countries.get(getContext()));
+        Phonenumber.PhoneNumber phoneNumber = Util.getRandomPhone(Countries.get());
         if (phoneNumber != null) {
             for (PhoneInputLayout phoneInputLayout : phoneInputLayouts) {
                 phoneInputLayout.setPhoneNumber(phoneNumber);

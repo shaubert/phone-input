@@ -60,7 +60,7 @@ public class CountryPickerDialog extends AppCompatDialog {
     }
 
     private void loadCountries() {
-        Countries.get(getContext(), new Countries.Callback() {
+        Countries.get(new Countries.Callback() {
             @Override
             public void onLoaded(Countries loadedCountries) {
                 if (countries == null) {

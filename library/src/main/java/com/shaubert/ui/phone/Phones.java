@@ -1,8 +1,10 @@
 package com.shaubert.ui.phone;
 
 import android.content.Context;
-import androidx.annotation.Nullable;
 import android.telephony.TelephonyManager;
+
+import androidx.annotation.Nullable;
+
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
@@ -56,9 +58,9 @@ public class Phones {
         return Locale.getDefault().getCountry();
     }
 
-    public static Country getCountyFromPhone(Phonenumber.PhoneNumber phoneNumber, Context context) {
+    public static Country getCountyFromPhone(Phonenumber.PhoneNumber phoneNumber) {
         String regionCode = PhoneNumberUtil.getInstance().getRegionCodeForNumber(phoneNumber);
-        return Countries.get(context).getCountryByIso(regionCode);
+        return Countries.get().getCountryByIso(regionCode);
     }
 
     public static @Nullable Phonenumber.PhoneNumber parse(String phone, @Nullable Country country) {

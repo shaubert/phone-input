@@ -8,6 +8,9 @@ import androidx.core.provider.FontRequest;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.shaubert.ui.phone.AndroidCurrentLocaleProvider;
+import com.shaubert.ui.phone.Countries;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setupToolbar();
 
+        Countries.setCurrentLocaleProvider(new AndroidCurrentLocaleProvider(this));
         loadEmojiFont(this);
 
         if (savedInstanceState == null) {

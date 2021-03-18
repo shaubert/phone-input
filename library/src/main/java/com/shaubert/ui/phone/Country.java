@@ -1,11 +1,8 @@
 package com.shaubert.ui.phone;
 
-import android.content.Context;
-import android.os.Build;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -16,23 +13,19 @@ public class Country implements Comparable<Country> {
     private static String language;
 
     private final String isoCode;
-    @Nullable
-    private final Context appContext;
 
     private String displayName;
     private String unicodeSymbol;
     private int countryCode;
     private boolean hasCountryCode;
 
-    public Country(String isoCode, @NonNull Context context) {
+    public Country(String isoCode) {
         this.isoCode = isoCode;
-        this.appContext = context;
     }
 
-    public Country(String isoCode, int countryCode, @NonNull Context context) {
+    public Country(String isoCode, int countryCode) {
         this.isoCode = isoCode;
         this.countryCode = countryCode;
-        this.appContext = context;
         hasCountryCode = true;
     }
 
@@ -46,7 +39,6 @@ public class Country implements Comparable<Country> {
 
     private Country(String isoCode, String displayName, String unicodeSymbol, int countryCode, boolean hasCountryCode) {
         this.isoCode = isoCode;
-        this.appContext = null;
         this.displayName = displayName;
         this.unicodeSymbol = unicodeSymbol;
         this.countryCode = countryCode;
@@ -88,18 +80,18 @@ public class Country implements Comparable<Country> {
     }
 
     public String getDisplayName() {
-        if (displayName != null || appContext == null) {
+        if (displayName != null) {
             return displayName;
         }
 
         synchronized (DISPLAY_COUNTRY_NAMES_CACHE) {
-            String newLanguage = null;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                appContext.getResources().getConfiguration().getLocales().get(0).getLanguage();
+            Countries.CurrentLocaleProvider provider = Countries.getCurrentLocaleProvider();
+            final String newLanguage;
+            if (provider != null) {
+                newLanguage = provider.getCurrentLocale().getLanguage();
             } else {
-                newLanguage = appContext.getResources().getConfiguration().locale.getLanguage();
+                newLanguage = Locale.getDefault().getLanguage();
             }
-            if (newLanguage == null) newLanguage = Locale.getDefault().getLanguage();
 
             if (!TextUtils.equals(newLanguage, language)) {
                 DISPLAY_COUNTRY_NAMES_CACHE.clear();

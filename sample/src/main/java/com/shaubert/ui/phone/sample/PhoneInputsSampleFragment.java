@@ -1,16 +1,24 @@
 package com.shaubert.ui.phone.sample;
 
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+
+import androidx.fragment.app.Fragment;
+
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
-import com.shaubert.ui.phone.*;
+import com.shaubert.ui.phone.Countries;
+import com.shaubert.ui.phone.Country;
+import com.shaubert.ui.phone.CountryPickerCallbacks;
+import com.shaubert.ui.phone.CountryPickerDialogManager;
+import com.shaubert.ui.phone.CountryPickerTextView;
+import com.shaubert.ui.phone.PhoneInputView;
+import com.shaubert.ui.phone.Phones;
 
 public class PhoneInputsSampleFragment extends Fragment {
 
@@ -86,7 +94,7 @@ public class PhoneInputsSampleFragment extends Fragment {
             return;
         }
 
-        Countries countries = Countries.get(getContext());
+        Countries countries = Countries.get();
         String[] possibleRegions = Phones.getPossibleRegions(getContext());
         for (String region : possibleRegions) {
             Country country = countries.getCountryByIso(region);
@@ -98,9 +106,9 @@ public class PhoneInputsSampleFragment extends Fragment {
     }
 
     private void setRandomPhone() {
-        Phonenumber.PhoneNumber phoneNumber = Util.getRandomPhone(Countries.get(getContext()));
+        Phonenumber.PhoneNumber phoneNumber = Util.getRandomPhone(Countries.get());
         if (phoneNumber != null) {
-            Country country = Phones.getCountyFromPhone(phoneNumber, getContext());
+            Country country = Phones.getCountyFromPhone(phoneNumber);
             setSelectedCountry(country);
 
             for (PhoneInputView inputView : phoneInputs) {

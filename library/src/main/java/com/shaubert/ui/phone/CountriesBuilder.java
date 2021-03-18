@@ -1,10 +1,13 @@
 package com.shaubert.ui.phone;
 
-import android.content.Context;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.PhoneNumberUtilProxy;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 class CountriesBuilder {
 
@@ -20,29 +23,29 @@ class CountriesBuilder {
         return phoneNumberUtil.getCountryCodeForRegion(countryIso);
     }
 
-    static List<Country> createCountriesList(Context context, boolean loadCountryCodes) {
+    static List<Country> createCountriesList(boolean loadCountryCodes) {
         List<Country> countries = null;
         if (loadCountryCodes) {
-            countries = createCountriesListWithProxy(context);
+            countries = createCountriesListWithProxy();
         }
         if (countries == null) {
-            countries = createCountriesListWithMetadata(context);
+            countries = createCountriesListWithMetadata();
         }
         return countries;
     }
 
-    static List<Country> createCountriesListWithMetadata(Context context) {
+    static List<Country> createCountriesListWithMetadata() {
         PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
         Set<String> regions = phoneNumberUtil.getSupportedRegions();
         List<Country> countries = new ArrayList<>(regions.size());
         for (String region : regions) {
-            countries.add(new Country(region, context));
+            countries.add(new Country(region));
         }
         return countries;
     }
 
     @SuppressWarnings("unchecked")
-    static List<Country> createCountriesListWithProxy(Context context) {
+    static List<Country> createCountriesListWithProxy() {
         Map<String, Integer> regionToCodeMap = getCountryCodesWithProxy();
         if (regionToCodeMap == null) {
             return null;
@@ -51,7 +54,7 @@ class CountriesBuilder {
         List<Country> countries = new ArrayList<>(regionToCodeMap.size());
         for (Map.Entry<String, Integer> entry : regionToCodeMap.entrySet()) {
             if (entry.getValue() == null) continue;
-            countries.add(new Country(entry.getKey(), entry.getValue(), context));
+            countries.add(new Country(entry.getKey(), entry.getValue()));
         }
 
         return countries;
