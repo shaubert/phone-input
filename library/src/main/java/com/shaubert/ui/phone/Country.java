@@ -100,7 +100,7 @@ public class Country implements Comparable<Country> {
 
             String name = DISPLAY_COUNTRY_NAMES_CACHE.get(isoCode);
             if (name == null) {
-                name = new Locale(language, isoCode).getDisplayCountry();
+                name = new Locale(isoCode, isoCode).getDisplayCountry(new Locale((language)));
                 DISPLAY_COUNTRY_NAMES_CACHE.put(isoCode, name);
             }
             return name;
