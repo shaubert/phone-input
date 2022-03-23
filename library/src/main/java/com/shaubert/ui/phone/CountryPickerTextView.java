@@ -6,9 +6,9 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import androidx.annotation.Nullable;
-import androidx.emoji.widget.EmojiAppCompatTextView;
+import androidx.appcompat.widget.AppCompatTextView;
 
-public class CountryPickerTextView extends EmojiAppCompatTextView implements CountryPickerView {
+public class CountryPickerTextView extends AppCompatTextView implements CountryPickerView {
 
     private CountryPickerDelegate delegate;
     private CountryChangedListener countryChangedListener;

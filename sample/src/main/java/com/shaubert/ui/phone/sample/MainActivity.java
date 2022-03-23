@@ -1,10 +1,7 @@
 package com.shaubert.ui.phone.sample;
 
-import android.content.Context;
 import android.os.Bundle;
-import androidx.emoji.text.EmojiCompat;
-import androidx.emoji.text.FontRequestEmojiCompatConfig;
-import androidx.core.provider.FontRequest;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -21,7 +18,6 @@ public class MainActivity extends AppCompatActivity {
         setupToolbar();
 
         Countries.setCurrentLocaleProvider(new AndroidCurrentLocaleProvider(this));
-        loadEmojiFont(this);
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
@@ -35,14 +31,5 @@ public class MainActivity extends AppCompatActivity {
         if (toolbar != null) {
             setSupportActionBar(toolbar);
         }
-    }
-
-    private static void loadEmojiFont(Context context) {
-        final FontRequest fontRequest = new FontRequest(
-                "com.google.android.gms.fonts",
-                "com.google.android.gms",
-                "Noto Color Emoji Compat",
-                R.array.com_google_android_gms_fonts_certs);
-        EmojiCompat.init(new FontRequestEmojiCompatConfig(context, fontRequest));
     }
 }
