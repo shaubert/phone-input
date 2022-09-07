@@ -36,15 +36,6 @@ public class CountryPickerDelegate implements CountryPickerView {
 
     public CountryPickerDelegate(CountryPickerView view, AttributeSet attrs, int defStyleAttr) {
         this.view = view;
-        init(attrs, defStyleAttr);
-    }
-
-    private void init(AttributeSet attrs, int defStyleAttr) {
-        Activity activity = getActivity(getContext());
-        if (!(activity instanceof FragmentActivity)) {
-            throw new IllegalArgumentException("must be created with FragmentActivity");
-        }
-        this.activity = (FragmentActivity) activity;
 
         if (attrs != null) {
             TypedArray typedArray = getContext().obtainStyledAttributes(
@@ -58,6 +49,24 @@ public class CountryPickerDelegate implements CountryPickerView {
             autoSetDefaultCountry = typedArray.getBoolean(R.styleable.pi_CountryPickerStyle_pi_autoSetDefaultCountry, autoSetDefaultCountry);
             typedArray.recycle();
         }
+
+        init();
+    }
+
+    public CountryPickerDelegate(CountryPickerView view, Boolean customCountries, Boolean autoSetDefaultCountry) {
+        this.view = view;
+        this.autoSetDefaultCountry = autoSetDefaultCountry;
+        this.customCountries = customCountries;
+
+        init();
+    }
+
+    private void init() {
+        Activity activity = getActivity(getContext());
+        if (!(activity instanceof FragmentActivity)) {
+            throw new IllegalArgumentException("must be created with FragmentActivity");
+        }
+        this.activity = (FragmentActivity) activity;
 
         if (!customCountries) {
             loadCountries();
